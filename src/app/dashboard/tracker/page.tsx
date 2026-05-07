@@ -4,6 +4,7 @@ import { useState } from "react";
 import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
 import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
+import BreakdownKategori from "@/components/features/carbon-tracker/BreakdownKategori";
 import type { EmisiData } from "@/types/carbon";
 
 export default function TrackerPage() {
@@ -32,12 +33,7 @@ export default function TrackerPage() {
         {/* Right col — Form & breakdown */}
         <div className="flex flex-col gap-6">
           <CatatAktivitasBaru />
-          <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
-            <h3 className="text-base font-bold text-[#1A1A1A]">Breakdown Kategori</h3>
-            <p className="mt-2 text-sm text-gray-400">
-              Donut chart akan tersedia di BLOK 2.3
-            </p>
-          </div>
+          <BreakdownKategori />
         </div>
       </div>
 
