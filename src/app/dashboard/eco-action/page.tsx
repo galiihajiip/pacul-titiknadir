@@ -1,4 +1,5 @@
 import BuktikanAksimu from "@/components/features/eco-action/BuktikanAksimu";
+import TantanganAktif from "@/components/features/eco-action/TantanganAktif";
 
 export default function EcoActionPage() {
   return (
@@ -12,16 +13,13 @@ export default function EcoActionPage() {
       {/* Upload bukti — full width */}
       <BuktikanAksimu />
 
-      {/* Tantangan + Leaderboard row — placeholder BLOK 3.2 */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
-          <h3 className="text-base font-bold text-[#1A1A1A]">Tantangan Aktif</h3>
-          <p className="mt-2 text-sm text-gray-400">Tersedia di BLOK 3.2</p>
-        </div>
-        <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
-          <h3 className="text-base font-bold text-[#1A1A1A]">Leaderboard</h3>
-          <p className="mt-2 text-sm text-gray-400">Tersedia di BLOK 3.2</p>
-        </div>
+      {/* Tantangan Aktif — full width */}
+      <TantanganAktif />
+
+      {/* Leaderboard — placeholder BLOK 3.2 */}
+      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
+        <h3 className="text-base font-bold text-[#1A1A1A]">Leaderboard</h3>
+        <p className="mt-2 text-sm text-gray-400">Tersedia di BLOK 3.2</p>
       </div>
 
       {/* Marketplace + Badges row — placeholder BLOK 3.3 */}
