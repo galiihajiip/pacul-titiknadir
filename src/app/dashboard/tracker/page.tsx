@@ -3,6 +3,7 @@
 import { useState } from "react";
 import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
+import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
 import type { EmisiData } from "@/types/carbon";
 
 export default function TrackerPage() {
@@ -39,6 +40,9 @@ export default function TrackerPage() {
           </div>
         </div>
       </div>
+
+      {/* Full-width riwayat table */}
+      <RiwayatAktivitas />
     </div>
   );
 }
