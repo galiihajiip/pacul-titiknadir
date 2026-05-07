@@ -2,6 +2,7 @@ import BuktikanAksimu from "@/components/features/eco-action/BuktikanAksimu";
 import TantanganAktif from "@/components/features/eco-action/TantanganAktif";
 import Leaderboard from "@/components/features/eco-action/Leaderboard";
 import GreenMarketplace from "@/components/features/eco-action/GreenMarketplace";
+import Pencapaian from "@/components/features/eco-action/Pencapaian";
 
 export default function EcoActionPage() {
   return (
@@ -24,11 +25,8 @@ export default function EcoActionPage() {
       {/* Marketplace */}
       <GreenMarketplace />
 
-      {/* Badge Koleksi — placeholder BLOK 3.4 */}
-      <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
-        <h3 className="text-base font-bold text-[#1A1A1A]">Badge Koleksi</h3>
-        <p className="mt-2 text-sm text-gray-400">Tersedia di BLOK 3.4</p>
-      </div>
+      {/* Pencapaian badges */}
+      <Pencapaian />
     </div>
   );
 }
