@@ -1,0 +1,117 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: ["class"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: "#2D6A4F",
+          50: "#E8F5EF",
+          100: "#C3E6D4",
+          200: "#9DD5B8",
+          300: "#76C49C",
+          400: "#50B380",
+          500: "#2D6A4F",
+          600: "#255840",
+          700: "#1C4531",
+          800: "#133122",
+          900: "#0A1E13",
+        },
+        secondary: {
+          DEFAULT: "#52B788",
+          50: "#EAF7F1",
+          100: "#C8EBD9",
+          200: "#A6DFC1",
+          300: "#83D3A9",
+          400: "#61C791",
+          500: "#52B788",
+          600: "#3F9A6E",
+          700: "#2D7C54",
+          800: "#1A5F3A",
+          900: "#084220",
+        },
+        accent: {
+          DEFAULT: "#F4A261",
+          50: "#FEF3E9",
+          100: "#FBDFC3",
+          200: "#F8CB9D",
+          300: "#F6B777",
+          400: "#F4A261",
+          500: "#E8893E",
+          600: "#CC6F1A",
+          700: "#A85612",
+          800: "#843D0A",
+          900: "#602402",
+        },
+        earth: {
+          DEFAULT: "#6B4226",
+          50: "#F2EAE4",
+          100: "#DECCBC",
+          200: "#CBAE95",
+          300: "#B7906D",
+          400: "#A37245",
+          500: "#6B4226",
+          600: "#573519",
+          700: "#42290D",
+          800: "#2E1C01",
+          900: "#190F00",
+        },
+        sky: {
+          DEFAULT: "#90E0EF",
+          50: "#EBF9FC",
+          100: "#C9F0F8",
+          200: "#A7E7F4",
+          300: "#90E0EF",
+          400: "#5BCFE8",
+          500: "#26BFE1",
+          600: "#189FBF",
+          700: "#0D7F9D",
+          800: "#026079",
+          900: "#004057",
+        },
+        bg: {
+          DEFAULT: "#F8FAF7",
+          dark: "#0F1A14",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
