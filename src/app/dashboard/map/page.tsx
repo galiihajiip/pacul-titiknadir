@@ -25,8 +25,8 @@ const MapContainer = dynamic(
 );
 
 export default function MapPage() {
-  const [activeCategory, setActiveCategory] = useState("Semua");
-  const [selectedMonth, setSelectedMonth] = useState("Oktober");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeMonth, setActiveMonth] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState<Hotspot | null>(null);
 
   return (
@@ -41,8 +41,8 @@ export default function MapPage() {
       <MapFilters
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
-        selectedMonth={selectedMonth}
-        onMonthChange={setSelectedMonth}
+        activeMonth={activeMonth}
+        onMonthChange={setActiveMonth}
       />
 
       {/* Map + District panel grid */}

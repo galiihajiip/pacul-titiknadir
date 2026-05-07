@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { MapContainer as LeafletMap, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import MapLegend from "./MapLegend";
 
 /* ── Types ── */
 export interface Hotspot {
@@ -10,7 +11,7 @@ export interface Hotspot {
   lat: number;
   lng: number;
   district: string;
-  category: "Energi" | "Limbah" | "Transportasi";
+  category: "Energi" | "Limbah" | "Transportasi" | "Pangan";
   intensity: "high" | "medium" | "low";
   value: number;
   actions: number;
@@ -18,7 +19,7 @@ export interface Hotspot {
 }
 
 interface MapContainerProps {
-  activeCategory: string;
+  activeCategory: string | null;
   onSelectDistrict: (h: Hotspot) => void;
 }
 
@@ -59,14 +60,15 @@ export default function MapContainer({ activeCategory, onSelectDistrict }: MapCo
   if (!mounted) return null;
 
   const visible = hotspots.filter(
-    (h) => activeCategory === "Semua" || h.category === activeCategory
+    (h) => activeCategory === null || h.category === activeCategory
   );
 
   return (
     <div
-      className="overflow-hidden rounded-[12px] border border-[#E5E7EB] shadow-sm"
-      style={{ height: "calc(100vh - 200px)" }}
+      className="relative rounded-[12px] border border-[#E5E7EB] shadow-sm"
+      style={{ height: "calc(100vh - 200px)", overflow: "hidden" }}
     >
+      <MapLegend />
       <LeafletMap
         center={[-7.2575, 112.7521]}
         zoom={13}
