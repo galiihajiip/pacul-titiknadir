@@ -5,6 +5,7 @@ import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChar
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
 import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
 import BreakdownKategori from "@/components/features/carbon-tracker/BreakdownKategori";
+import RekomendasiAI from "@/components/features/carbon-tracker/RekomendasiAI";
 import type { EmisiData } from "@/types/carbon";
 
 export default function TrackerPage() {
@@ -34,6 +35,7 @@ export default function TrackerPage() {
         <div className="flex flex-col gap-6">
           <CatatAktivitasBaru />
           <BreakdownKategori />
+          <RekomendasiAI />
         </div>
       </div>
 
