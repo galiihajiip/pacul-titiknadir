@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PageWrapper from "@/components/common/PageWrapper";
 import dynamic from "next/dynamic";
 import MapFilters from "@/components/features/local-impact-map/MapFilters";
 import DistrictStats from "@/components/features/local-impact-map/DistrictStats";
@@ -31,6 +32,7 @@ export default function MapPage() {
   const [selectedDistrict, setSelectedDistrict] = useState<Hotspot | null>(null);
 
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-4">
       {/* Page header */}
       <div>
@@ -66,5 +68,6 @@ export default function MapPage() {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

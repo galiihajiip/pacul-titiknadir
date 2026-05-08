@@ -1,3 +1,4 @@
+import PageWrapper from "@/components/common/PageWrapper";
 import BuktikanAksimu from "@/components/features/eco-action/BuktikanAksimu";
 import TantanganAktif from "@/components/features/eco-action/TantanganAktif";
 import Leaderboard from "@/components/features/eco-action/Leaderboard";
@@ -6,6 +7,7 @@ import Pencapaian from "@/components/features/eco-action/Pencapaian";
 
 export default function EcoActionPage() {
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-6">
       {/* Page header */}
       <div>
@@ -28,5 +30,6 @@ export default function EcoActionPage() {
       {/* Pencapaian badges */}
       <Pencapaian />
     </div>
+    </PageWrapper>
   );
 }

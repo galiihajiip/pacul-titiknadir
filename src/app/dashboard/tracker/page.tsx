@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PageWrapper from "@/components/common/PageWrapper";
 import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
 import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
@@ -13,6 +14,7 @@ export default function TrackerPage() {
   const emptyData: EmisiData[] = [];
 
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-6">
       {/* Page header */}
       <div>
@@ -42,5 +44,6 @@ export default function TrackerPage() {
       {/* Full-width riwayat table */}
       <RiwayatAktivitas />
     </div>
+    </PageWrapper>
   );
 }

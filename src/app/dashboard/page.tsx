@@ -1,3 +1,4 @@
+import PageWrapper from "@/components/common/PageWrapper";
 import WelcomeSection from "@/components/features/dashboard-main/WelcomeSection";
 import KpiCards from "@/components/features/dashboard-main/KpiCards";
 import EmisiMingguanChart from "@/components/features/dashboard-main/EmisiMingguanChart";
@@ -7,6 +8,7 @@ import TipsHariIni from "@/components/features/dashboard-main/TipsHariIni";
 
 export default function DashboardPage() {
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-6">
       {/* Welcome greeting */}
       <WelcomeSection />
@@ -26,5 +28,6 @@ export default function DashboardPage() {
       {/* Grid 2: Community activity full width */}
       <AktivitasKomunitas />
     </div>
+    </PageWrapper>
   );
 }

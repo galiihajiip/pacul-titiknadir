@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Leaf, Trophy, Star, CheckCircle, Lock, Award, Users } from "lucide-react";
 import ProfileHeader from "@/components/features/profile/ProfileHeader";
+import PageWrapper from "@/components/common/PageWrapper";
 import { useCountAnimation } from "@/hooks/useCountAnimation";
 
 /* ── A. Stats data ── */
@@ -111,6 +112,7 @@ function StatCard({
 /* ── Page ── */
 export default function ProfilePage() {
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-6">
 
       {/* Header — fade + slide from top */}
@@ -233,5 +235,6 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

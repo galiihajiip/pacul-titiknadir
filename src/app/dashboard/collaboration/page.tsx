@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PageWrapper from "@/components/common/PageWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import PostComposer, { type NewPost } from "@/components/features/collaboration-wall/PostComposer";
 import PostCard, { mockPosts, type Post } from "@/components/features/collaboration-wall/PostCard";
@@ -46,6 +47,7 @@ export default function CollaborationPage() {
   const allPosts = [...userPosts, ...mockPosts];
 
   return (
+    <PageWrapper>
     <div className="flex flex-col gap-6">
       {/* Page header */}
       <div>
@@ -82,5 +84,6 @@ export default function CollaborationPage() {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }
