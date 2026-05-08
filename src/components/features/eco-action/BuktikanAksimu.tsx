@@ -94,7 +94,13 @@ function UploadProgress() {
   return (
     <div className="flex flex-col items-center gap-4 py-8">
       <p className="text-sm font-medium text-gray-600">Mengupload foto...</p>
-      <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-gray-100">
+      <div
+        className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-gray-100"
+        role="progressbar"
+        aria-label="Progress upload foto"
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         <div
           className="h-full rounded-full bg-[#2D5F3F]"
           style={{ animation: "uploadBar 1.4s ease-in-out forwards" }}
@@ -151,7 +157,14 @@ function SuccessResult({ onReset }: { onReset: () => void }) {
           <span className="font-medium text-gray-600">Confidence Score</span>
           <span className="font-bold text-[#10B981]">98.4%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+        <div
+          className="h-2 overflow-hidden rounded-full bg-gray-100"
+          role="progressbar"
+          aria-label="Confidence score AI verifikasi"
+          aria-valuenow={98}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: "98.4%" }}
@@ -276,11 +289,12 @@ export default function BuktikanAksimu() {
 
       {/* Challenge selector */}
       <div className="relative mb-5">
-        <label className="mb-1.5 block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <label htmlFor="bukti-challenge" className="mb-1.5 block text-xs font-semibold text-gray-500 uppercase tracking-wide">
           Pilih Tantangan
         </label>
         <div className="relative">
           <select
+            id="bukti-challenge"
             value={selectedChallenge}
             onChange={(e) => setSelectedChallenge(e.target.value)}
             disabled={uploadState !== "idle"}
@@ -316,10 +330,14 @@ export default function BuktikanAksimu() {
             />
             <div
               onClick={() => fileInputRef.current?.click()}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") fileInputRef.current?.click(); }}
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
-              className="flex cursor-pointer flex-col items-center gap-3 rounded-lg px-6 py-12 text-center transition-colors"
+              role="button"
+              tabIndex={0}
+              aria-label="Upload bukti foto — klik atau seret file ke sini"
+              className="flex cursor-pointer flex-col items-center gap-3 rounded-lg px-6 py-12 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
               style={{
                 border: `2px dashed ${dragOver ? "#2D5F3F" : "#A8D5BA"}`,
                 backgroundColor: dragOver ? "rgba(45,95,63,0.04)" : "transparent",

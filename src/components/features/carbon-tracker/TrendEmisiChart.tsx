@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -81,7 +81,7 @@ function CustomTooltip({
   );
 }
 
-export default function TrendEmisiChart({
+const TrendEmisiChart = memo(function TrendEmisiChart({
   data,
   view,
   onViewChange,
@@ -112,7 +112,8 @@ export default function TrendEmisiChart({
               <button
                 key={v}
                 onClick={() => onViewChange(v)}
-                className="rounded-md px-3 py-1 text-xs font-medium transition-colors"
+                aria-pressed={view === v}
+                className="rounded-md px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-1"
                 style={
                   view === v
                     ? { backgroundColor: "#2D5F3F", color: "#fff" }
@@ -126,6 +127,7 @@ export default function TrendEmisiChart({
         </div>
 
         {/* Bar chart */}
+        <div role="img" aria-label={`Grafik batang trend emisi ${view === "weekly" ? "mingguan" : "bulanan"} dalam kg CO₂`}>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart
             data={chartData}
@@ -179,6 +181,7 @@ export default function TrendEmisiChart({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+        </div>
       </div>
 
       {/* ── Comparison Chart Card ── */}
@@ -192,7 +195,8 @@ export default function TrendEmisiChart({
           </span>
         </div>
 
-        <ResponsiveContainer width="100%" height={120}>
+        <div role="img" aria-label="Grafik perbandingan trend emisi kamu vs rata-rata Jawa Timur">
+        <ResponsiveContainer width="100%" height={200}>
           <LineChart
             data={mockComparisonWeekly}
             margin={{ top: 4, right: 8, left: -20, bottom: 0 }}
@@ -244,7 +248,10 @@ export default function TrendEmisiChart({
             />
           </LineChart>
         </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
-}
+});
+
+export default TrendEmisiChart;

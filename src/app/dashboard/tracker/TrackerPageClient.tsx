@@ -8,6 +8,7 @@ import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivi
 import BreakdownKategori from "@/components/features/carbon-tracker/BreakdownKategori";
 import RekomendasiAI from "@/components/features/carbon-tracker/RekomendasiAI";
 import type { EmisiData } from "@/types/carbon";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 
 export default function TrackerPageClient() {
   const [chartView, setChartView] = useState<"weekly" | "monthly">("weekly");
@@ -23,11 +24,13 @@ export default function TrackerPageClient() {
 
         <div className="grid gap-4 lg:gap-6 lg:grid-cols-[60fr_40fr]">
           <div className="flex flex-col gap-6">
-            <TrendEmisiChart
-              data={emptyData}
-              view={chartView}
-              onViewChange={setChartView}
-            />
+            <ErrorBoundary>
+              <TrendEmisiChart
+                data={emptyData}
+                view={chartView}
+                onViewChange={setChartView}
+              />
+            </ErrorBoundary>
           </div>
           <div className="flex flex-col gap-6">
             <CatatAktivitasBaru />

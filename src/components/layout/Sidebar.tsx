@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LayoutDashboard, Activity, Zap, Map, Users, User, X } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -45,8 +46,9 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
                 <Link
                   href={href}
                   onClick={onLinkClick}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-1",
                     isActive ? "bg-[#A8D5BA] text-[#2D5F3F]" : "text-gray-600 hover:bg-[#F5F5F5] hover:text-[#2D5F3F]"
                   )}
                 >
@@ -78,6 +80,13 @@ function DesktopSidebar() {
 
 /* ── Mobile drawer sidebar ── */
 function MobileSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -100,6 +109,9 @@ function MobileSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
             animate={{ x: 0 }}
             exit={{ x: -240 }}
             transition={{ type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu navigasi dashboard"
             className="fixed inset-y-0 left-0 z-[70] w-60 bg-white shadow-2xl lg:hidden"
           >
             {/* Close button */}

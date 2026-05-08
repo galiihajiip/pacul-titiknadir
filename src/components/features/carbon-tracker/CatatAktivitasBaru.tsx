@@ -122,9 +122,10 @@ export default function CatatAktivitasBaru({
 
         {/* Field 1 — Kategori */}
         <div>
-          <label className={labelBase}>Pilih Kategori</label>
+          <label htmlFor="catat-category" className={labelBase}>Pilih Kategori</label>
           <div className="relative">
             <select
+              id="catat-category"
               {...register("category")}
               className={`${inputBase} appearance-none pr-9 bg-white`}
               defaultValue=""
@@ -161,8 +162,9 @@ export default function CatatAktivitasBaru({
         {/* Field 2 — Jumlah + Unit */}
         <div className="grid grid-cols-[1fr_80px] gap-2">
           <div>
-            <label className={labelBase}>Jumlah</label>
+            <label htmlFor="catat-amount" className={labelBase}>Jumlah</label>
             <input
+              id="catat-amount"
               type="number"
               step="0.01"
               placeholder="Contoh: 15"
@@ -174,8 +176,9 @@ export default function CatatAktivitasBaru({
             )}
           </div>
           <div>
-            <label className={labelBase}>Unit</label>
+            <label htmlFor="catat-unit" className={labelBase}>Unit</label>
             <input
+              id="catat-unit"
               type="text"
               {...register("unit")}
               className={`${inputBase} text-center font-medium text-[#2D5F3F]`}
@@ -186,11 +189,12 @@ export default function CatatAktivitasBaru({
 
         {/* Field 3 — Catatan */}
         <div>
-          <label className={labelBase}>
+          <label htmlFor="catat-notes" className={labelBase}>
             Catatan{" "}
             <span className="font-normal text-gray-400">(opsional)</span>
           </label>
           <textarea
+            id="catat-notes"
             rows={2}
             placeholder="Deskripsi aktivitas..."
             {...register("notes")}

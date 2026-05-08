@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import PageWrapper from "@/components/common/PageWrapper";
 import BuktikanAksimu from "@/components/features/eco-action/BuktikanAksimu";
 import TantanganAktif from "@/components/features/eco-action/TantanganAktif";
 import Leaderboard from "@/components/features/eco-action/Leaderboard";
 import GreenMarketplace from "@/components/features/eco-action/GreenMarketplace";
 import Pencapaian from "@/components/features/eco-action/Pencapaian";
+
+export const metadata: Metadata = {
+  title: "EcoAction — PACUL",
+  description: "Upload bukti aksi hijau, kumpulkan XP, dan redeem reward di Green Marketplace.",
+};
 
 export default function EcoActionPage() {
   return (

@@ -137,7 +137,14 @@ function ChallengeCard({
           <span className="text-gray-500">Progress</span>
           <span className="font-semibold" style={{ color: iconColor }}>{progress}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+        <div
+          className="h-2 overflow-hidden rounded-full bg-gray-100"
+          role="progressbar"
+          aria-valuenow={progress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`Progress tantangan ${title}: ${progress}%`}
+        >
           <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: `${progress}%` }}

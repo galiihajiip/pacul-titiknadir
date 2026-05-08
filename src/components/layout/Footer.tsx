@@ -60,7 +60,7 @@ export default function Footer() {
               <span className="text-xl font-bold text-white tracking-wide">PACUL</span>
             </Link>
             <p className="text-sm italic text-white/60 leading-relaxed">
-              "Ubah Aksi Jadi Dampak Nyata"
+              &ldquo;Ubah Aksi Jadi Dampak Nyata&rdquo;
             </p>
             <p className="text-xs text-white/50 leading-relaxed">
               Platform Aksi Kolektif untuk Lingkungan<br />
