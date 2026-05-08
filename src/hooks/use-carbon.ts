@@ -1,25 +1,32 @@
-// TODO: Carbon tracker custom hook — BLOK carbon-tracker
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { carbonService } from "@/services/carbon.service";
+import type { NewEmissionDTO } from "@/services/carbon.service";
 
-export function useCarbonActivities() {
+export function useCarbonEmissions() {
   return useQuery({
-    queryKey: ["carbon", "activities"],
-    queryFn: () => carbonService.getActivities().then((r) => r.data),
+    queryKey: ["carbon", "emissions"],
+    queryFn: () => carbonService.getEmissions(),
   });
 }
 
-export function useCarbonSummary() {
+export function useCarbonWeeklyTrend() {
   return useQuery({
-    queryKey: ["carbon", "summary"],
-    queryFn: () => carbonService.getSummary().then((r) => r.data),
+    queryKey: ["carbon", "trend", "weekly"],
+    queryFn: () => carbonService.getWeeklyTrend(),
   });
 }
 
-export function useCreateActivity() {
+export function useCarbonMonthlyTrend() {
+  return useQuery({
+    queryKey: ["carbon", "trend", "monthly"],
+    queryFn: () => carbonService.getMonthlyTrend(),
+  });
+}
+
+export function useAddEmission() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: carbonService.createActivity,
+    mutationFn: (data: NewEmissionDTO) => carbonService.addEmission(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["carbon"] });
     },
