@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import PageWrapper from "@/components/common/PageWrapper";
 import WelcomeSection from "@/components/features/dashboard-main/WelcomeSection";
 import KpiCards from "@/components/features/dashboard-main/KpiCards";
@@ -5,6 +6,11 @@ import EmisiMingguanChart from "@/components/features/dashboard-main/EmisiMinggu
 import TantanganAktifPanel from "@/components/features/dashboard-main/TantanganAktifPanel";
 import AktivitasKomunitas from "@/components/features/dashboard-main/AktivitasKomunitas";
 import TipsHariIni from "@/components/features/dashboard-main/TipsHariIni";
+
+export const metadata: Metadata = {
+  title: "Dashboard — PACUL",
+  description: "Pantau ringkasan aktivitas, emisi karbon, dan poin hijau komunitasmu.",
+};
 
 export default function DashboardPage() {
   return (
