@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Leaf, Zap, Coins, Trophy, CheckCircle, Lock } from "lucide-react";
+import { Leaf, Zap, Coins, Trophy, CheckCircle, Lock } from "lucide-react";
+import ProfileHeader from "@/components/features/profile/ProfileHeader";
 
 /* ── Mock data ── */
 const user = {
@@ -45,38 +46,7 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col gap-6">
       {/* Profile header card */}
-      <div className="relative overflow-hidden rounded-[14px] p-6 text-white"
-        style={{ background: "linear-gradient(135deg, #2D5F3F 0%, #1a3d27 100%)" }}>
-        <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white/5" />
-        <div className="relative flex flex-wrap items-center gap-5">
-          {/* Avatar */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white/30 text-2xl font-bold"
-            style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>
-            {user.initials}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1">
-            <h1 className="text-xl font-bold">{user.name}</h1>
-            <p className="mt-0.5 text-sm text-white/60">{user.location} · Bergabung {user.joined}</p>
-            <div className="mt-3 flex items-center gap-2">
-              <Star size={13} className="text-yellow-300" fill="#FDE047" />
-              <span className="text-xs font-semibold text-white/80">Level {user.level}</span>
-              <span className="text-xs text-white/50">·</span>
-              <span className="text-xs text-white/60">{user.xp.toLocaleString("id-ID")} / {user.xpNext.toLocaleString("id-ID")} XP</span>
-            </div>
-            <div className="mt-2 h-2 w-48 overflow-hidden rounded-full bg-white/20">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${xpPct}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="h-full rounded-full bg-[#7AC74F]"
-              />
-            </div>
-            <p className="mt-1 text-[10px] text-white/40">{user.xpNext - user.xp} XP lagi ke level {user.level + 1}</p>
-          </div>
-        </div>
-      </div>
+      <ProfileHeader />
 
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
