@@ -3,7 +3,8 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import MapFilters from "@/components/features/local-impact-map/MapFilters";
-import DistrictPanel from "@/components/features/local-impact-map/DistrictPanel";
+import DistrictStats from "@/components/features/local-impact-map/DistrictStats";
+import DistrictLeaderboard from "@/components/features/local-impact-map/DistrictLeaderboard";
 import type { Hotspot } from "@/components/features/local-impact-map/MapContainer";
 
 const MapContainer = dynamic(
@@ -55,9 +56,13 @@ export default function MapPage() {
           />
         </div>
 
-        {/* District info panel */}
-        <div style={{ height: "calc(100vh - 200px)" }}>
-          <DistrictPanel district={selectedDistrict} />
+        {/* Right column: stats + leaderboard */}
+        <div
+          className="flex flex-col gap-4 overflow-y-auto"
+          style={{ height: "calc(100vh - 200px)" }}
+        >
+          <DistrictStats district={selectedDistrict} />
+          <DistrictLeaderboard />
         </div>
       </div>
     </div>
