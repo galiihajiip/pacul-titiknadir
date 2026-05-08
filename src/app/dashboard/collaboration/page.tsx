@@ -4,6 +4,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PostComposer, { type NewPost } from "@/components/features/collaboration-wall/PostComposer";
 import PostCard, { mockPosts, type Post } from "@/components/features/collaboration-wall/PostCard";
+import TrendingTopics from "@/components/features/collaboration-wall/TrendingTopics";
+import InitiatifUnggulan from "@/components/features/collaboration-wall/InitiatifUnggulan";
+import AnggotaAktif from "@/components/features/collaboration-wall/AnggotaAktif";
 
 /* Convert a NewPost (from composer) → Post shape for PostCard */
 function newPostToPost(p: NewPost): Post {
@@ -71,16 +74,11 @@ export default function CollaborationPage() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Right: sidebar placeholder */}
+        {/* Right: sidebar */}
         <div className="flex flex-col gap-4">
-          <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-[#1A1A1A]">Trending Topik</h3>
-            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.3</p>
-          </div>
-          <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-[#1A1A1A]">Anggota Aktif</h3>
-            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.3</p>
-          </div>
+          <TrendingTopics />
+          <InitiatifUnggulan />
+          <AnggotaAktif />
         </div>
       </div>
     </div>
