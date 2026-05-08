@@ -70,12 +70,14 @@ export default function RekomendasiAI() {
           >
             {REKOMENDASI_TEXT}
           </p>
-          <Link
-            href="/dashboard/map"
+          <a
+            href="https://maps.google.com/maps?q=rute+KRL+Surabaya"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors"
           >
             Lihat Rute KRL →
-          </Link>
+          </a>
         </>
       )}
 

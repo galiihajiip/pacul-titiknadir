@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAuthStore } from "@/store/auth.store";
 import { Lock, ChevronDown, Loader2 } from "lucide-react";
 
 /* ── Types ── */
@@ -25,6 +26,13 @@ interface PostComposerProps {
 /* ── Constants ── */
 const POST_TYPES: PostType[] = ["Ide", "Gerakan", "Event", "Laporan"];
 
+const TYPE_PLACEHOLDER: Record<PostType, string> = {
+  Ide: "Bagikan ide inovatifmu untuk lingkungan Surabaya...",
+  Gerakan: "Ceritakan gerakan yang ingin kamu pimpin...",
+  Event: "Informasikan event lingkungan yang akan kamu adakan...",
+  Laporan: "Laporkan kondisi lingkungan yang perlu perhatian...",
+};
+
 const TYPE_COLOR: Record<PostType, string> = {
   Ide: "#2D5F3F",
   Gerakan: "#10B981",
@@ -40,6 +48,7 @@ const VERIFIED_ACTIONS = [
 
 /* ── Component ── */
 export default function PostComposer({ onPost }: PostComposerProps) {
+  const user = useAuthStore((s) => s.user);
   const [postType, setPostType] = useState<PostType>("Ide");
   const [content, setContent] = useState("");
   const [linkVerified, setLinkVerified] = useState(false);
@@ -47,6 +56,9 @@ export default function PostComposer({ onPost }: PostComposerProps) {
   const [isPosting, setIsPosting] = useState(false);
 
   const canPost = content.trim().length > 0;
+  const authorName = user ? user.name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase() : "GU";
+  const authorFullName = user ? user.name.split(" ")[0] + " " + (user.name.split(" ")[1]?.[0] ?? "") + "." : "Guest U.";
+  const avatarBg = user?.avatarColor ?? "#2D5F3F";
 
   const handleSubmit = () => {
     if (!canPost || isPosting) return;
@@ -58,8 +70,8 @@ export default function PostComposer({ onPost }: PostComposerProps) {
         type: postType,
         content: content.trim(),
         linkedAction: linkVerified ? selectedAction : null,
-        author: "Aditya D.",
-        avatar: "AD",
+        author: authorFullName,
+        avatar: authorName,
         createdAt: "Baru saja",
         likes: 0,
         comments: 0,
@@ -76,8 +88,8 @@ export default function PostComposer({ onPost }: PostComposerProps) {
       {/* Row 1 — Avatar + textarea */}
       <div className="flex gap-3">
         {/* Avatar */}
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style={{ backgroundColor: "#2D5F3F" }}>
-          AD
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white" style={{ backgroundColor: avatarBg }}>
+          {authorName}
         </span>
 
         {/* Textarea wrapper */}
@@ -86,7 +98,7 @@ export default function PostComposer({ onPost }: PostComposerProps) {
             rows={3}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Bagikan ide atau gerakan Anda..."
+            placeholder={TYPE_PLACEHOLDER[postType]}
             className="w-full resize-none bg-transparent text-sm text-[#1A1A1A] placeholder-gray-400 outline-none"
           />
         </div>

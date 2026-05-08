@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { CheckCircle, Users, Leaf, TrendingDown, ArrowDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle, Users, Leaf, TrendingDown, ArrowDown, X } from "lucide-react";
+import { useAuthStore } from "@/store/auth.store";
 
 /* ── mini animation variants ── */
 const fadeIn = {
@@ -108,8 +111,69 @@ function BrowserMockup() {
   );
 }
 
+/* ── Demo Modal ── */
+function DemoModal({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ type: "spring", duration: 0.4 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl rounded-2xl bg-[#1a1a1a] p-1 shadow-2xl"
+      >
+        <button
+          onClick={onClose}
+          aria-label="Tutup demo"
+          className="absolute -right-3 -top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md hover:bg-gray-100"
+        >
+          <X size={16} />
+        </button>
+        <div className="flex flex-col items-center gap-4 rounded-xl bg-[#0f1a0f] p-8 text-white">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#2D5F3F]">
+            <Leaf size={28} className="text-[#7AC74F]" />
+          </div>
+          <h3 className="text-xl font-bold">PACUL Platform Preview</h3>
+          <p className="text-center text-sm text-white/60">Cara kerja platform aksi komunitas untuk lingkungan hidup</p>
+          <div className="grid w-full grid-cols-3 gap-3 text-center">
+            {[
+              { emoji: "📊", title: "Carbon Tracker", desc: "Lacak emisi harianmu" },
+              { emoji: "🏆", title: "EcoAction", desc: "Tantangan & reward" },
+              { emoji: "🗺️", title: "Impact Map", desc: "Dampak per wilayah" },
+            ].map((f) => (
+              <div key={f.title} className="rounded-xl bg-white/5 p-4">
+                <div className="mb-2 text-2xl">{f.emoji}</div>
+                <p className="text-xs font-semibold">{f.title}</p>
+                <p className="mt-0.5 text-[10px] text-white/50">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/register"
+            onClick={onClose}
+            className="mt-2 rounded-lg bg-[#7AC74F] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#6ab344] transition-colors"
+          >
+            Mulai Gratis Sekarang →
+          </Link>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ── Main HeroSection ── */
 export default function HeroSection() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+  const [showDemo, setShowDemo] = useState(false);
+
+  const handleStart = () => {
+    router.push(isAuthenticated ? "/dashboard" : "/register");
+  };
+
   return (
     <section
       className="relative flex min-h-[90vh] w-full items-center overflow-hidden"
@@ -195,16 +259,17 @@ export default function HeroSection() {
               custom={0.4}
               className="flex flex-wrap gap-4"
             >
-              <Link
-                href="/dashboard"
+              <button
+                onClick={handleStart}
                 className="rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors"
                 style={{ backgroundColor: "#7AC74F" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#6ab344")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#7AC74F")}
               >
                 Mulai Sekarang
-              </Link>
+              </button>
               <button
+                onClick={() => setShowDemo(true)}
                 className="rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors"
                 style={{ border: "2px solid rgba(255,255,255,0.5)", backgroundColor: "transparent" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")}
@@ -287,6 +352,10 @@ export default function HeroSection() {
 
         </div>
       </div>
+
+      <AnimatePresence>
+        {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
+      </AnimatePresence>
 
       {/* Keyframe styles injected inline */}
       <style>{`

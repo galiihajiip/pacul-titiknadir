@@ -4,6 +4,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, CheckCircle, Loader2, ChevronDown, RefreshCw } from "lucide-react";
 import { MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "@/utils/constants";
+import { toast } from "sonner";
+import { useEcoActionStore } from "@/store/ecoAction.store";
+import { useAuthStore } from "@/store/auth.store";
 
 /* ── Types ── */
 type UploadState = "idle" | "uploading" | "analyzing" | "success" | "error";
@@ -131,7 +134,26 @@ function AnalyzingSpinner() {
 }
 
 /* ── Success Result ── */
-function SuccessResult({ onReset }: { onReset: () => void }) {
+function SuccessResult({ onReset, challengeId, onClaimed }: { onReset: () => void; challengeId: string; onClaimed: () => void }) {
+  const claimReward = useEcoActionStore((s) => s.claimReward);
+  const updateUser = useAuthStore((s) => s.updateUser);
+  const user = useAuthStore((s) => s.user);
+  const challenges = useEcoActionStore((s) => s.challenges);
+  const [claimed, setClaimed] = useState(false);
+
+  const handleClaim = () => {
+    if (claimed) return;
+    const challenge = challenges.find((c) => c.id === challengeId);
+    const xpReward = challenge?.xpReward ?? 150;
+    claimReward(challengeId);
+    if (user) {
+      updateUser({ xp: (user.xp ?? 0) + xpReward, totalXP: (user.totalXP ?? 0) + xpReward });
+    }
+    toast.success(`+${xpReward} XP earned! Reward diklaim. 🌱`);
+    setClaimed(true);
+    onClaimed();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -184,10 +206,12 @@ function SuccessResult({ onReset }: { onReset: () => void }) {
 
       {/* CTA */}
       <button
-        className="w-full rounded-md py-3 text-sm font-bold text-white transition-colors hover:opacity-90"
+        onClick={handleClaim}
+        disabled={claimed}
+        className="w-full rounded-md py-3 text-sm font-bold text-white transition-colors hover:opacity-90 disabled:opacity-50"
         style={{ backgroundColor: "#2D5F3F" }}
       >
-        Klaim Reward Sekarang
+        {claimed ? "Reward Diklaim ✓" : "Klaim Reward Sekarang"}
       </button>
 
       {/* Reset */}
@@ -203,6 +227,12 @@ function SuccessResult({ onReset }: { onReset: () => void }) {
 
 /* ── Main Component ── */
 export default function BuktikanAksimu() {
+  const challenges = useEcoActionStore((s) => s.challenges);
+  const userChallenges = useEcoActionStore((s) => s.userChallenges);
+  const joinedChallenges = challenges.filter((c) => userChallenges.includes(c.id));
+  const selectableChallenges = joinedChallenges.length > 0 ? joinedChallenges.map((c) => c.title) : CHALLENGES;
+  const getChallengeId = (title: string) => challenges.find((c) => c.title === title)?.id ?? "c1";
+
   const [uploadState, setUploadState] = useState<UploadState>("idle");
   const [selectedChallenge, setSelectedChallenge] = useState("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -229,6 +259,10 @@ export default function BuktikanAksimu() {
       : uploadState === "analyzing"
       ? 1
       : 2;
+
+  const handleClaimed = () => {
+    setTimeout(() => handleReset(), 1500);
+  };
 
   const validateFile = (file: File): boolean => {
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type as "image/jpeg" | "image/png")) {
@@ -372,7 +406,7 @@ export default function BuktikanAksimu() {
 
         {uploadState === "success" && (
           <motion.div key="success" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <SuccessResult onReset={handleReset} />
+            <SuccessResult onReset={handleReset} challengeId={getChallengeId(selectedChallenge)} onClaimed={handleClaimed} />
           </motion.div>
         )}
       </AnimatePresence>

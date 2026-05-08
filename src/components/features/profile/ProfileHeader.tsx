@@ -1,27 +1,54 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { MapPin, Pencil, Share2 } from "lucide-react";
-
-const user = {
-  initials: "AP",
-  name: "Aditya Pratama",
-  location: "Surabaya, Indonesia",
-  level: 12,
-  xpCurrent: 750,
-  xpNext: 1000,
-  xpPct: 75,
-  ecoPoints: 4200,
-  joined: "Okt 2026",
-};
-
-const miniStats = [
-  { label: `${user.ecoPoints.toLocaleString("id-ID")} EcoPoints` },
-  { label: `Level ${user.level}` },
-  { label: `Bergabung ${user.joined}` },
-];
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/auth.store";
+import { useEcoActionStore } from "@/store/ecoAction.store";
 
 export default function ProfileHeader() {
+  const router = useRouter();
+  const storeUser = useAuthStore((s) => s.user);
+  const ecoPoints = useEcoActionStore((s) => s.ecoPoints);
+
+  const displayUser = storeUser ?? {
+    avatarInitials: "AP",
+    name: "Aditya Pratama",
+    location: "Surabaya, Indonesia",
+    level: 12,
+    xp: 750,
+    totalXP: 1000,
+    joinedAt: "2026-10-01",
+    avatarColor: undefined as string | undefined,
+  };
+
+  const level = storeUser?.level ?? 12;
+  const xpCurrent = storeUser?.xp ?? 750;
+  const xpNext = 1000;
+  const xpPct = Math.min(100, Math.round((xpCurrent / xpNext) * 100));
+  const joined = storeUser?.joinedAt
+    ? new Intl.DateTimeFormat("id-ID", { month: "short", year: "numeric" }).format(new Date(storeUser.joinedAt))
+    : "Okt 2026";
+
+  const miniStats = [
+    { label: `${ecoPoints.toLocaleString("id-ID")} EcoPoints` },
+    { label: `Level ${level}` },
+    { label: `Bergabung ${joined}` },
+  ];
+
+  const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "https://pacul.app";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: "Profil PACUL", url });
+        return;
+      } catch { /* user cancelled */ }
+    }
+    await navigator.clipboard.writeText(url);
+    toast.success("Link profil disalin! 🔗");
+  };
+
   return (
     <div
       className="relative overflow-hidden rounded-[14px] p-7 text-white"
@@ -41,29 +68,33 @@ export default function ProfileHeader() {
           <div
             className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-bold text-white"
             style={{
-              backgroundColor: "rgba(255,255,255,0.15)",
+              backgroundColor: displayUser.avatarColor ?? "rgba(255,255,255,0.15)",
               border: "3px solid #F4A261",
             }}
           >
-            {user.initials}
+            {displayUser.avatarInitials}
           </div>
 
           {/* Name + location + buttons */}
           <div>
-            <h1 className="text-xl font-bold leading-tight">{user.name}</h1>
+            <h1 className="text-xl font-bold leading-tight">{displayUser.name}</h1>
             <p className="mt-0.5 flex items-center gap-1 text-sm text-white/70">
               <MapPin size={13} />
-              {user.location}
+              {displayUser.location}
             </p>
 
             {/* Action buttons */}
             <div className="mt-3 flex gap-3">
-              <button className="flex items-center gap-1.5 rounded-md border border-white/40 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:border-white/70 hover:bg-white/10">
+              <button
+                onClick={() => router.push("/dashboard/profile/edit")}
+                className="flex items-center gap-1.5 rounded-md border border-white/40 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:border-white/70 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+              >
                 <Pencil size={13} />
                 Edit Profil
               </button>
               <button
-                className="flex items-center gap-1.5 rounded-md px-4 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                onClick={handleShare}
+                className="flex items-center gap-1.5 rounded-md px-4 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                 style={{ backgroundColor: "#F4A261" }}
               >
                 <Share2 size={13} />
@@ -78,16 +109,16 @@ export default function ProfileHeader() {
           <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-white/50">
             Current Status
           </p>
-          <p className="text-2xl font-bold">Level {user.level}</p>
+          <p className="text-2xl font-bold">Level {level}</p>
           <p className="mt-0.5 text-sm text-white/70">
-            {user.xpNext - user.xpCurrent} XP lagi untuk Level {user.level + 1}!
+            {xpNext - xpCurrent} XP lagi untuk Level {level + 1}!
           </p>
 
           {/* Progress bar */}
           <div className="mt-3 h-3 overflow-hidden rounded-full bg-white/20">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: `${user.xpPct}%` }}
+              animate={{ width: `${xpPct}%` }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
               className="h-full rounded-full"
               style={{ backgroundColor: "#F4A261" }}
@@ -97,7 +128,7 @@ export default function ProfileHeader() {
           {/* XP range labels */}
           <div className="mt-1 flex justify-between text-[10px] text-white/50">
             <span>0 XP</span>
-            <span>{user.xpNext.toLocaleString("id-ID")} XP</span>
+            <span>{xpNext.toLocaleString("id-ID")} XP</span>
           </div>
 
           {/* Mini stats row */}

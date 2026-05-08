@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { toast } from "sonner";
+import { useEcoActionStore } from "@/store/ecoAction.store";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Zap, Trash2, Bus, Clock, Users, CheckCircle } from "lucide-react";
@@ -196,21 +199,32 @@ function ChallengeCard({
 
 /* ── Main ── */
 export default function TantanganAktif() {
-  const [challenges, setChallenges] = useState(INITIAL_CHALLENGES);
+  const joinChallenge = useEcoActionStore((s) => s.joinChallenge);
+  const userChallenges = useEcoActionStore((s) => s.userChallenges);
+  const [challenges, setChallenges] = useState(
+    INITIAL_CHALLENGES.map((c) => ({ ...c, isJoined: userChallenges.includes(c.id) }))
+  );
 
   const handleJoin = (id: string) => {
+    const challenge = challenges.find((c) => c.id === id);
+    if (!challenge) return;
+    joinChallenge(id);
     setChallenges((prev) =>
       prev.map((c) => (c.id === id ? { ...c, isJoined: true, participants: c.participants + 1 } : c))
     );
+    toast.success(`Kamu bergabung tantangan \u2018${challenge.title}\u2019! Selesaikan untuk +${challenge.xpReward} XP 💪`);
   };
 
   return (
     <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-center justify-between">
         <h3 className="text-base font-semibold text-[#1A1A1A]">Tantangan Aktif</h3>
-        <span className="rounded-full bg-[#2D5F3F]/10 px-2.5 py-0.5 text-xs font-semibold text-[#2D5F3F]">
-          {challenges.length} tantangan
-        </span>
+        <Link
+          href="/dashboard/eco-action"
+          className="text-xs font-medium text-[#2D5F3F] hover:underline transition-colors"
+        >
+          Lihat Semua ›
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Train, Zap, Trash2, Leaf, Bike } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -90,6 +91,11 @@ interface RiwayatAktivitasProps {
 export default function RiwayatAktivitas({
   items = mockRiwayat,
 }: RiwayatAktivitasProps) {
+  const [expanded, setExpanded] = useState(false);
+  const INITIAL_COUNT = 5;
+  const visibleItems = expanded ? items : items.slice(0, INITIAL_COUNT);
+  const canExpand = items.length > INITIAL_COUNT;
+
   return (
     <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-6 shadow-sm">
       {/* Card header */}
@@ -97,9 +103,14 @@ export default function RiwayatAktivitas({
         <h3 className="text-base font-semibold text-[#1A1A1A]">
           Riwayat Aktivitas
         </h3>
-        <button className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors">
-          Lihat Semua &rsaquo;
-        </button>
+        {canExpand && (
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors"
+          >
+            {expanded ? "Sembunyikan ↑" : "Lihat Semua ›"}
+          </button>
+        )}
       </div>
 
       {/* Table wrapper */}
@@ -119,7 +130,7 @@ export default function RiwayatAktivitas({
           </thead>
           <tbody>
             <AnimatePresence initial={false}>
-              {items.map((item, i) => (
+              {visibleItems.map((item, i) => (
                 <motion.tr
                   key={item.id}
                   custom={i}

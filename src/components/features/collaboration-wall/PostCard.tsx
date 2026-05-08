@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Heart, MessageCircle, MapPin } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Heart, MessageCircle, MapPin, X, Users } from "lucide-react";
+import { toast } from "sonner";
 
 /* ── Types ── */
 export type PostType = "IDE" | "GERAKAN" | "EVENT" | "LAPORAN";
@@ -78,11 +79,90 @@ function avatarColor(initials: string) {
   return AVATAR_COLORS[initials.charCodeAt(0) % AVATAR_COLORS.length];
 }
 
+/* ── Join Modal ── */
+function JoinModal({ post, onClose }: { post: Post; onClose: () => void }) {
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleJoin = async () => {
+    if (!name.trim()) return;
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 700));
+    setLoading(false);
+    toast.success(`Berhasil bergabung! Kami akan menghubungi kamu. 🌱`);
+    onClose();
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <Users size={16} className="text-[#2D5F3F]" />
+              <h3 className="text-base font-bold text-[#1A1A1A]">
+                {post.type === "GERAKAN" ? "Ikut Gerakan" : "Daftar Event"}
+              </h3>
+            </div>
+            <p className="mt-1 text-xs text-gray-400 leading-snug line-clamp-2">{post.content}</p>
+          </div>
+          <button onClick={onClose} aria-label="Tutup" className="text-gray-400 hover:text-gray-600">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="flex flex-col gap-3">
+          <div>
+            <label htmlFor="join-name" className="mb-1 block text-xs font-medium text-gray-600">Nama</label>
+            <input
+              id="join-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nama lengkap kamu"
+              className="w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm outline-none focus:border-[#2D5F3F] focus:ring-2 focus:ring-[#2D5F3F]/20"
+            />
+          </div>
+          <div>
+            <label htmlFor="join-contact" className="mb-1 block text-xs font-medium text-gray-600">WhatsApp / Email</label>
+            <input
+              id="join-contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              placeholder="Opsional"
+              className="w-full rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm outline-none focus:border-[#2D5F3F] focus:ring-2 focus:ring-[#2D5F3F]/20"
+            />
+          </div>
+          <button
+            onClick={handleJoin}
+            disabled={!name.trim() || loading}
+            className="flex items-center justify-center gap-2 rounded-lg bg-[#2D5F3F] py-2.5 text-sm font-semibold text-white hover:bg-[#245033] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
+          >
+            {loading ? (
+              <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Mendaftar...</>
+            ) : "Ya, Gabung! 🌱"}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ── Card ── */
 export default function PostCard({ post }: { post: Post }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes);
   const [likeAnimating, setLikeAnimating] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
 
   const badge = TYPE_CONFIG[post.type];
   const showJoinBtn = post.type === "GERAKAN" || post.type === "EVENT";
@@ -186,13 +266,20 @@ export default function PostCard({ post }: { post: Post }) {
         {/* Join (Gerakan / Event only) */}
         {showJoinBtn && (
           <button
-            className="ml-auto rounded-md px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+            onClick={() => setShowJoinModal(true)}
+            className="ml-auto rounded-md px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-1"
             style={{ backgroundColor: "#2D5F3F" }}
           >
             Ikut Gabung
           </button>
         )}
       </div>
+
+      <AnimatePresence>
+        {showJoinModal && (
+          <JoinModal post={post} onClose={() => setShowJoinModal(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
