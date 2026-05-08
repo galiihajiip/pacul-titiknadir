@@ -1,23 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import PostComposer, { type NewPost } from "@/components/features/collaboration-wall/PostComposer";
+import PostCard, { mockPosts, type Post } from "@/components/features/collaboration-wall/PostCard";
 
-type PostType = "Ide" | "Gerakan" | "Event" | "Laporan";
+/* Convert a NewPost (from composer) → Post shape for PostCard */
+function newPostToPost(p: NewPost): Post {
+  const typeMap: Record<string, Post["type"]> = {
+    Ide: "IDE", Gerakan: "GERAKAN", Event: "EVENT", Laporan: "LAPORAN",
+  };
+  return {
+    id: p.id,
+    author: { name: p.author, initials: p.avatar, location: "Surabaya" },
+    timeAgo: p.createdAt,
+    type: typeMap[p.type] ?? "IDE",
+    content: p.content,
+    likes: 0,
+    replies: 0,
+    isVerifiedAction: !!p.linkedAction,
+    verifiedActionLabel: p.linkedAction ?? undefined,
+  };
+}
 
-const TYPE_COLOR: Record<PostType, string> = {
-  Ide: "#2D5F3F",
-  Gerakan: "#10B981",
-  Event: "#F59E0B",
-  Laporan: "#EF4444",
+const feedVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
 };
 
 export default function CollaborationPage() {
-  const [posts, setPosts] = useState<NewPost[]>([]);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
 
   const handleNewPost = (post: NewPost) => {
-    setPosts((prev) => [post, ...prev]);
+    setUserPosts((prev) => [newPostToPost(post), ...prev]);
   };
+
+  const allPosts = [...userPosts, ...mockPosts];
 
   return (
     <div className="flex flex-col gap-6">
@@ -33,60 +56,30 @@ export default function CollaborationPage() {
       {/* Feed + Sidebar grid */}
       <div className="grid gap-6 lg:grid-cols-[60fr_40fr]">
         {/* Left: feed */}
-        <div className="flex flex-col gap-4">
-          {posts.length === 0 ? (
-            <div className="rounded-[12px] border border-dashed border-[#E5E7EB] bg-white px-6 py-12 text-center">
-              <p className="text-sm font-medium text-gray-400">Belum ada post.</p>
-              <p className="mt-1 text-xs text-gray-300">Mulai dengan posting ide pertamamu!</p>
-            </div>
-          ) : (
-            posts.map((post) => {
-              const color = TYPE_COLOR[post.type as PostType] ?? "#2D5F3F";
-              return (
-                <div
-                  key={post.id}
-                  className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm"
-                  style={{ borderLeft: `3px solid ${color}` }}
-                >
-                  <div className="mb-3 flex items-center gap-3">
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                      style={{ backgroundColor: "#2D5F3F" }}
-                    >
-                      {post.avatar}
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-[#1A1A1A]">{post.author}</p>
-                      <p className="text-xs text-gray-400">{post.createdAt}</p>
-                    </div>
-                    <span
-                      className="ml-auto rounded-full px-2.5 py-0.5 text-[10px] font-semibold"
-                      style={{ backgroundColor: `${color}15`, color }}
-                    >
-                      {post.type}
-                    </span>
-                  </div>
-                  <p className="text-sm text-[#1A1A1A]">{post.content}</p>
-                  {post.linkedAction && (
-                    <div className="mt-3 flex items-center gap-1.5 rounded-md bg-[#2D5F3F]/5 px-3 py-2 text-xs text-[#2D5F3F]">
-                      🔒 Aksi terverifikasi: <span className="font-medium">{post.linkedAction}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })
-          )}
-        </div>
+        <motion.div
+          className="flex flex-col gap-4"
+          variants={feedVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <AnimatePresence>
+            {allPosts.map((post) => (
+              <motion.div key={post.id} variants={itemVariants} layout>
+                <PostCard post={post} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Right: sidebar placeholder */}
         <div className="flex flex-col gap-4">
           <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
             <h3 className="text-sm font-semibold text-[#1A1A1A]">Trending Topik</h3>
-            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.2</p>
+            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.3</p>
           </div>
           <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
             <h3 className="text-sm font-semibold text-[#1A1A1A]">Anggota Aktif</h3>
-            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.2</p>
+            <p className="mt-2 text-xs text-gray-400">Tersedia di BLOK 5.3</p>
           </div>
         </div>
       </div>
