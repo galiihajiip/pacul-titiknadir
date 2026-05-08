@@ -23,7 +23,7 @@ const CardShell = forwardRef<
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay }}
       whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.10)" }}
-      className="flex gap-4 rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm transition-shadow duration-200"
+      className="flex gap-2 rounded-[12px] border border-[#E5E7EB] bg-white p-3 shadow-sm transition-shadow duration-200 sm:gap-4 sm:p-5"
     >
       <div
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
@@ -99,7 +99,7 @@ function RankCard({ delay }: { delay: number }) {
 /* ── Main export ── */
 export default function KpiCards() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       <CarbonSavedCard delay={0} />
       <EcoPointsCard delay={0.1} />
       <ChallengesCard delay={0.2} />

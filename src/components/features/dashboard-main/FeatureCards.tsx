@@ -69,7 +69,7 @@ const cardVariants = {
 
 export default function FeatureCards() {
   return (
-    <section className="w-full bg-white px-6 py-20 md:px-[120px]">
+    <section className="w-full bg-white px-4 py-12 sm:px-6 sm:py-16 md:px-[120px] md:py-20">
       {/* Section heading */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}

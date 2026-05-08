@@ -50,8 +50,8 @@ export default function Footer() {
       style={{ backgroundColor: "#1a3d27" }}
     >
       {/* Main grid */}
-      <div className="mx-auto max-w-7xl px-6 py-16 md:px-[120px]">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 md:px-[120px] md:py-16">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Col 1 — Brand */}
           <div className="flex flex-col gap-4">
@@ -150,7 +150,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-xs text-white/50 sm:flex-row md:px-[120px]">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/50 sm:flex-row sm:gap-3 sm:px-6 md:px-[120px]">
           <p>© 2026 PACUL — Titik Nadir Team. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="#" className="hover:text-white/80 transition-colors">Privacy Policy</Link>

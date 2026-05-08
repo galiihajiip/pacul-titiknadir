@@ -33,10 +33,10 @@ export default function MapPage() {
 
   return (
     <PageWrapper>
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 lg:gap-4">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Local Impact Map</h1>
+        <h1 className="text-xl font-bold text-[#1A1A1A] sm:text-2xl">Local Impact Map</h1>
         <p className="mt-1 text-sm text-gray-500">Visualisasi dampak aksi komunitas per wilayah</p>
       </div>
 
@@ -49,7 +49,7 @@ export default function MapPage() {
       />
 
       {/* Map + District panel grid */}
-      <div className="grid gap-4 lg:grid-cols-[70fr_30fr]">
+      <div className="grid gap-4 lg:grid-cols-[70fr_30fr] lg:gap-4">
         {/* Map area */}
         <div className="sticky top-4">
           <MapContainer
@@ -61,7 +61,7 @@ export default function MapPage() {
         {/* Right column: stats + leaderboard */}
         <div
           className="flex flex-col gap-4 overflow-y-auto"
-          style={{ height: "calc(100vh - 200px)" }}
+          style={{ height: "auto" }}
         >
           <DistrictStats district={selectedDistrict} />
           <DistrictLeaderboard />

@@ -42,16 +42,11 @@ function StatItem({ stat, isLast }: { stat: Stat; isLast: boolean }) {
   return (
     <div
       ref={ref}
-      className="flex flex-1 flex-col items-center px-8 py-4"
-      style={
-        !isLast
-          ? { borderRight: "1px solid rgba(255,255,255,0.2)" }
-          : undefined
-      }
+      className="flex w-full flex-1 flex-col items-center px-6 py-6 sm:px-8 sm:py-4"
     >
       <span
         className="mb-2 font-extrabold leading-none"
-        style={{ fontSize: "56px", color: "#7AC74F", fontFamily: "inherit" }}
+        style={{ fontSize: "clamp(36px, 8vw, 56px)", color: "#7AC74F", fontFamily: "inherit" }}
       >
         {display}
       </span>
@@ -71,7 +66,7 @@ export default function StatsSection() {
       className="w-full py-16"
       style={{ backgroundColor: "#2D5F3F" }}
     >
-      <div className="mx-auto flex max-w-4xl flex-col items-center divide-y divide-white/20 sm:flex-row sm:divide-x sm:divide-y-0">
+      <div className="mx-auto flex max-w-4xl flex-col items-center divide-y divide-white/20 sm:flex-row sm:divide-x sm:divide-y-0 sm:items-stretch">
         {STATS.map((stat, i) => (
           <StatItem key={stat.label} stat={stat} isLast={i === STATS.length - 1} />
         ))}

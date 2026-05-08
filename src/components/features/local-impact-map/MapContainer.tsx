@@ -65,8 +65,8 @@ export default function MapContainer({ activeCategory, onSelectDistrict }: MapCo
 
   return (
     <div
-      className="relative rounded-[12px] border border-[#E5E7EB] shadow-sm"
-      style={{ height: "calc(100vh - 200px)", overflow: "hidden" }}
+      className="relative rounded-[12px] border border-[#E5E7EB] shadow-sm h-[300px] lg:h-[calc(100vh-200px)]"
+      style={{ overflow: "hidden" }}
     >
       <MapLegend />
       <LeafletMap

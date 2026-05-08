@@ -132,8 +132,8 @@ export default function HeroSection() {
         style={{ backgroundColor: "#7AC74F", animation: "pulse 6s ease-in-out infinite" }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-20">
-        <div className="grid items-center gap-12 md:grid-cols-[55fr_45fr]">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-16 md:px-20 md:py-20">
+        <div className="grid items-center gap-8 md:gap-12 md:grid-cols-[55fr_45fr]">
 
           {/* ── Left: Text ── */}
           <div className="flex flex-col">
@@ -167,7 +167,7 @@ export default function HeroSection() {
               initial="hidden"
               animate="visible"
               custom={0.2}
-              className="mb-5 text-5xl font-bold leading-tight md:text-[52px]"
+              className="mb-5 text-3xl font-bold leading-tight sm:text-4xl md:text-[52px]"
             >
               <span className="text-white">Ubah Aksi Jadi</span>
               <br />
@@ -180,7 +180,7 @@ export default function HeroSection() {
               initial="hidden"
               animate="visible"
               custom={0.3}
-              className="mb-8 max-w-[480px] text-lg leading-relaxed"
+              className="mb-6 max-w-[480px] text-base leading-relaxed md:mb-8 md:text-lg"
               style={{ color: "rgba(255,255,255,0.75)" }}
             >
               Berdayakan komunitasmu dengan platform berbasis data untuk memantau,
@@ -239,7 +239,7 @@ export default function HeroSection() {
             variants={slideRight}
             initial="hidden"
             animate="visible"
-            className="relative hidden md:block"
+            className="relative hidden md:block max-w-[520px] mx-auto w-full"
           >
             {/* Float animation wrapper */}
             <div className="animate-float">

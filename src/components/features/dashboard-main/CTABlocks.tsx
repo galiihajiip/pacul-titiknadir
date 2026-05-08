@@ -67,8 +67,8 @@ const cardVariants = {
 
 export default function CTABlocks() {
   return (
-    <section className="w-full bg-[#F5F5F5] px-6 py-20 md:px-[120px]">
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <section className="w-full bg-[#F5F5F5] px-4 py-6 sm:px-6 sm:py-12 md:px-[120px] md:py-20">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {BLOCKS.map((block, i) => (
           <CTACard key={block.title} block={block} index={i} />
         ))}

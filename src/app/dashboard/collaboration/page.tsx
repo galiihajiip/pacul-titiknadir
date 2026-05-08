@@ -48,10 +48,10 @@ export default function CollaborationPage() {
 
   return (
     <PageWrapper>
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 lg:gap-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Collaboration Wall</h1>
+        <h1 className="text-xl font-bold text-[#1A1A1A] sm:text-2xl">Collaboration Wall</h1>
         <p className="mt-1 text-sm text-gray-500">Bagikan ide, gerakan, dan aksi hijaumu</p>
       </div>
 
@@ -59,7 +59,7 @@ export default function CollaborationPage() {
       <PostComposer onPost={handleNewPost} />
 
       {/* Feed + Sidebar grid */}
-      <div className="grid gap-6 lg:grid-cols-[60fr_40fr]">
+      <div className="grid gap-4 lg:gap-6 lg:grid-cols-[60fr_40fr]">
         {/* Left: feed */}
         <motion.div
           className="flex flex-col gap-4"

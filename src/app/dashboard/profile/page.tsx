@@ -132,7 +132,7 @@ export default function ProfilePage() {
       </div>
 
       {/* B + C. Badges (60%) + Activities (40%) */}
-      <div className="grid gap-6 lg:grid-cols-[60fr_40fr]">
+      <div className="grid gap-4 lg:gap-6 lg:grid-cols-[60fr_40fr]">
 
         {/* B. Achievement badges grid */}
         <div className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
@@ -143,7 +143,7 @@ export default function ProfilePage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {profileBadges.map((badge, i) => (
               <div key={badge.name} className="group relative flex flex-col items-center gap-1.5">
                 <motion.div

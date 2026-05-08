@@ -9,7 +9,7 @@ import TipsHariIni from "@/components/features/dashboard-main/TipsHariIni";
 export default function DashboardPage() {
   return (
     <PageWrapper>
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 lg:gap-6">
       {/* Welcome greeting */}
       <WelcomeSection />
 

@@ -8,10 +8,10 @@ import Pencapaian from "@/components/features/eco-action/Pencapaian";
 export default function EcoActionPage() {
   return (
     <PageWrapper>
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 lg:gap-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">EcoAction</h1>
+        <h1 className="text-xl font-bold text-[#1A1A1A] sm:text-2xl">EcoAction</h1>
         <p className="mt-1 text-sm text-gray-500">Gamifikasi aksi hijau komunitasmu</p>
       </div>
 
