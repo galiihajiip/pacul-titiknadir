@@ -242,7 +242,7 @@ export default function HeroSection() {
             className="relative hidden md:block"
           >
             {/* Float animation wrapper */}
-            <div style={{ animation: "heroFloat 4s ease-in-out infinite" }}>
+            <div className="animate-float">
               <BrowserMockup />
             </div>
 
@@ -290,10 +290,6 @@ export default function HeroSection() {
 
       {/* Keyframe styles injected inline */}
       <style>{`
-        @keyframes heroFloat {
-          0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-8px); }
-        }
         @keyframes pulse {
           0%, 100% { opacity: 0.1; transform: scale(1); }
           50%       { opacity: 0.18; transform: scale(1.15); }

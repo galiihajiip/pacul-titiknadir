@@ -54,17 +54,14 @@ function Tooltip({ badge, visible }: { badge: Badge; visible: boolean }) {
 function BadgeItem({ badge }: { badge: Badge }) {
   const [hovered, setHovered] = useState(false);
 
-  const earnedAnimation = badge.isNew
-    ? { scale: [0.5, 1.1, 1], opacity: [0, 1, 1] }
-    : { scale: 1, opacity: 1 };
-
   return (
     <div className="relative flex flex-col items-center gap-2">
       <Tooltip badge={badge} visible={hovered} />
 
       <motion.div
-        animate={earnedAnimation}
-        transition={badge.isNew ? { type: "spring", stiffness: 260, damping: 18 } : undefined}
+        initial={badge.isNew ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
+        animate={badge.isNew ? { scale: [0, 1.2, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
+        transition={badge.isNew ? { duration: 0.6, times: [0, 0.6, 1] } : undefined}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className="relative flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-transform duration-200 hover:scale-110"

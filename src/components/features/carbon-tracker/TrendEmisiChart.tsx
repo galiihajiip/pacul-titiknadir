@@ -165,8 +165,10 @@ export default function TrendEmisiChart({
             <Bar
               dataKey="value"
               radius={[4, 4, 0, 0]}
+              isAnimationActive={true}
               animationBegin={0}
-              animationDuration={800}
+              animationDuration={1000}
+              animationEasing="ease-out"
             >
               {chartData.map((_, i) => (
                 <Cell
@@ -223,6 +225,9 @@ export default function TrendEmisiChart({
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}
+              isAnimationActive={true}
+              animationDuration={1000}
+              animationEasing="ease-out"
             />
             <Line
               type="monotone"
@@ -233,6 +238,9 @@ export default function TrendEmisiChart({
               strokeDasharray="5 5"
               dot={false}
               activeDot={{ r: 4 }}
+              isAnimationActive={true}
+              animationDuration={1000}
+              animationEasing="ease-out"
             />
           </LineChart>
         </ResponsiveContainer>

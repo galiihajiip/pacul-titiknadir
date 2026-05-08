@@ -1,43 +1,29 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 
-export function useCountAnimation(
+export function useCountAnimation<T extends HTMLElement = HTMLDivElement>(
   target: number,
-  duration: number = 1800
-): { value: number; ref: React.RefObject<HTMLDivElement> } {
-  const [value, setValue] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const hasRun = useRef(false);
+  duration: number = 1500
+): { count: number; value: number; ref: React.RefObject<T> } {
+  const [count, setCount] = useState(0);
+  const ref = useRef<T>(null);
+  const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!isInView) return;
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, target, duration]);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasRun.current) {
-          hasRun.current = true;
-          const startTime = performance.now();
-
-          const tick = (now: number) => {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            // ease-out cubic
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setValue(Math.round(eased * target));
-            if (progress < 1) requestAnimationFrame(tick);
-          };
-
-          requestAnimationFrame(tick);
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target, duration]);
-
-  return { value, ref };
+  return { count, value: count, ref };
 }
