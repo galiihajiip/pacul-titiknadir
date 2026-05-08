@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Tracker", href: "/dashboard/tracker" },
   { label: "EcoAction", href: "/dashboard/eco-action" },
+  { label: "Langkah", href: "/dashboard/step-tracker" },
   { label: "Map", href: "/dashboard/map" },
   { label: "Collaboration", href: "/dashboard/collaboration" },
 ];

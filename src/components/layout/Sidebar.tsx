@@ -4,13 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { LayoutDashboard, Activity, Zap, Map, Users, User, X } from "lucide-react";
+import { LayoutDashboard, Activity, Zap, Map, Users, User, Footprints, X } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { useStepTrackerStore } from "@/store/stepTracker.store";
 
 const MENU_ITEMS = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { label: "Carbon Tracker", icon: Activity, href: "/dashboard/tracker" },
   { label: "EcoAction", icon: Zap, href: "/dashboard/eco-action" },
+  { label: "Langkah Hijau", icon: Footprints, href: "/dashboard/step-tracker", live: true },
   { label: "Impact Map", icon: Map, href: "/dashboard/map" },
   { label: "Collaboration", icon: Users, href: "/dashboard/collaboration" },
   { label: "Profile", icon: User, href: "/dashboard/profile" },
@@ -28,6 +30,7 @@ function LeafIcon({ className }: { className?: string }) {
 /* ── Shared nav content ── */
 function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
+  const isLiveTracking = useStepTrackerStore((s) => s.isTracking);
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
@@ -39,7 +42,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3">
         <ul className="flex flex-col gap-1">
-          {MENU_ITEMS.map(({ label, icon: Icon, href }) => {
+          {MENU_ITEMS.map(({ label, icon: Icon, href, live }) => {
             const isActive = href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
             return (
               <li key={href}>
@@ -53,7 +56,12 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
                   )}
                 >
                   <Icon size={18} className={cn("shrink-0", isActive ? "text-[#2D5F3F]" : "text-gray-400")} />
-                  {label}
+                  <span className="flex-1">{label}</span>
+                  {live && isLiveTracking && (
+                    <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white leading-none">
+                      LIVE
+                    </span>
+                  )}
                 </Link>
               </li>
             );
