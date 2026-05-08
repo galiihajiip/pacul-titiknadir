@@ -5,6 +5,7 @@ import PageWrapper from "@/components/common/PageWrapper";
 import TrendEmisiChart from "@/components/features/carbon-tracker/TrendEmisiChart";
 import CatatAktivitasBaru from "@/components/features/carbon-tracker/CatatAktivitasBaru";
 import ScanStrukListrik from "@/components/features/carbon-tracker/ScanStrukListrik";
+import InputListrikManual from "@/components/features/carbon-tracker/InputListrikManual";
 import RiwayatAktivitas from "@/components/features/carbon-tracker/RiwayatAktivitas";
 import BreakdownKategori from "@/components/features/carbon-tracker/BreakdownKategori";
 import RekomendasiAI from "@/components/features/carbon-tracker/RekomendasiAI";
@@ -20,16 +21,6 @@ const TABS: { id: InputTab; label: string }[] = [
   { id: "listrik", label: "⚡ Input Listrik" },
 ];
 
-/* Placeholder for EXT-05 */
-function InputListrikPlaceholder() {
-  return (
-    <div className="rounded-[12px] border-2 border-dashed border-[#E5E7EB] bg-white p-10 text-center">
-      <p className="text-3xl">⚡</p>
-      <p className="mt-2 font-semibold text-gray-500">Input Listrik Manual</p>
-      <p className="mt-1 text-sm text-gray-400">Segera hadir di pembaruan berikutnya (EXT-05)</p>
-    </div>
-  );
-}
 
 export default function TrackerPageClient() {
   const [chartView, setChartView] = useState<"weekly" | "monthly">("weekly");
@@ -77,7 +68,7 @@ export default function TrackerPageClient() {
             {/* Tab panels */}
             {activeTab === "manual" && <CatatAktivitasBaru />}
             {activeTab === "scan"   && <ScanStrukListrik />}
-            {activeTab === "listrik" && <InputListrikPlaceholder />}
+            {activeTab === "listrik" && <InputListrikManual />}
 
             <BreakdownKategori />
             <RekomendasiAI />
