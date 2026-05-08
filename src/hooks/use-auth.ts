@@ -1,8 +1,7 @@
-// TODO: Auth custom hook — BLOK auth
 import { useAuthStore } from "@/store/auth.store";
 
 export function useAuth() {
-  const { user, token, isAuthenticated, setUser, setToken, logout } =
+  const { user, isAuthenticated, isLoading, login, logout, setUser } =
     useAuthStore();
-  return { user, token, isAuthenticated, setUser, setToken, logout };
+  return { user, isAuthenticated, isLoading, login, logout, setUser };
 }
