@@ -3,8 +3,8 @@ import PageWrapper from "@/components/common/PageWrapper";
 import BuktikanAksimu from "@/components/features/eco-action/BuktikanAksimu";
 import TantanganAktif from "@/components/features/eco-action/TantanganAktif";
 import Leaderboard from "@/components/features/eco-action/Leaderboard";
-import GreenMarketplace from "@/components/features/eco-action/GreenMarketplace";
 import Pencapaian from "@/components/features/eco-action/Pencapaian";
+import { MarketplaceCTA } from "@/components/features/eco-action/MarketplaceCTA";
 
 export const metadata: Metadata = {
   title: "EcoAction — PACUL",
@@ -30,11 +30,11 @@ export default function EcoActionPage() {
       {/* Leaderboard */}
       <Leaderboard />
 
-      {/* Marketplace */}
-      <GreenMarketplace />
-
       {/* Pencapaian badges */}
       <Pencapaian />
+
+      {/* Marketplace CTA — redirects to /dashboard/marketplace */}
+      <MarketplaceCTA />
     </div>
     </PageWrapper>
   );

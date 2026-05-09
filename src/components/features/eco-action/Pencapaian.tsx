@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock } from "lucide-react";
@@ -122,9 +123,12 @@ export default function Pencapaian() {
             {earned}/{badges.length} badge diraih
           </p>
         </div>
-        <button className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors">
+        <Link
+          href="/dashboard/marketplace"
+          className="text-sm font-medium text-[#2D5F3F] hover:underline transition-colors"
+        >
           Lihat Semua →
-        </button>
+        </Link>
       </div>
 
       {/* Progress bar */}
