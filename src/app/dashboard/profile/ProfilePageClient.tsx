@@ -6,11 +6,12 @@ import { Leaf, Trophy, Star, CheckCircle, Lock, Award, Users } from "lucide-reac
 import ProfileHeader from "@/components/features/profile/ProfileHeader";
 import PageWrapper from "@/components/common/PageWrapper";
 import { useCountAnimation } from "@/hooks/useCountAnimation";
+import { useUserStore } from "@/store/userStore";
 
-const statsConfig = [
-  { icon: Leaf, label: "CO₂ SAVED", target: 124, suffix: " kg", iconBg: "rgba(45,95,63,0.12)", iconColor: "#2D5F3F", duration: 1600 },
-  { icon: Trophy, label: "TANTANGAN SELESAI", target: 15, suffix: "", iconBg: "rgba(245,158,11,0.12)", iconColor: "#F59E0B", duration: 1200 },
-  { icon: Star, label: "ECOPOINTS EARNED", target: 4200, suffix: "", iconBg: "rgba(244,162,97,0.15)", iconColor: "#F4A261", duration: 2000 },
+const STATS_META = [
+  { icon: Leaf,   label: "CO₂ SAVED",        suffix: " kg", iconBg: "rgba(45,95,63,0.12)",   iconColor: "#2D5F3F", duration: 1600, key: "carbonSaved"          as const },
+  { icon: Trophy, label: "TANTANGAN SELESAI", suffix: "",   iconBg: "rgba(245,158,11,0.12)", iconColor: "#F59E0B", duration: 1200, key: "challengesCompleted"   as const },
+  { icon: Star,   label: "ECOPOINTS EARNED", suffix: "",   iconBg: "rgba(244,162,97,0.15)", iconColor: "#F4A261", duration: 2000, key: "totalXpEarned"         as const },
 ];
 
 const profileBadges = [
@@ -32,7 +33,7 @@ const recentActivities = [
 
 function StatCard({
   icon: Icon, label, target, suffix, iconBg, iconColor, duration, delay,
-}: (typeof statsConfig)[0] & { delay: number }) {
+}: { icon: React.ElementType; label: string; target: number; suffix: string; iconBg: string; iconColor: string; duration: number; delay: number }) {
   const { value, ref } = useCountAnimation(target, duration);
   return (
     <motion.div
@@ -55,6 +56,11 @@ function StatCard({
 }
 
 export default function ProfilePageClient() {
+  const carbonSaved        = useUserStore((s) => s.carbonSaved);
+  const challengesCompleted = useUserStore((s) => s.challengesCompleted);
+  const totalXpEarned      = useUserStore((s) => s.totalXpEarned);
+  const storeValues = { carbonSaved, challengesCompleted, totalXpEarned };
+
   return (
     <PageWrapper>
       <div className="flex flex-col gap-6">
@@ -64,8 +70,8 @@ export default function ProfilePageClient() {
 
         <section aria-label="Statistik profil">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {statsConfig.map((s, i) => (
-              <StatCard key={s.label} {...s} delay={0.1 + i * 0.1} />
+            {STATS_META.map(({ key: storeKey, ...s }, i) => (
+              <StatCard key={s.label} {...s} target={storeValues[storeKey]} delay={0.1 + i * 0.1} />
             ))}
           </div>
         </section>

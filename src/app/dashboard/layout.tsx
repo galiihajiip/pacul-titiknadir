@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 import Sidebar from "@/components/layout/Sidebar";
+import { useUserStore } from "@/store/userStore";
 
 export default function DashboardLayout({
   children,
@@ -13,6 +14,15 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   useOfflineDetection();
+
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const lastLogin = localStorage.getItem("pacul_last_login");
+    if (lastLogin !== today) {
+      localStorage.setItem("pacul_last_login", today);
+      useUserStore.getState().awardXP(5, "daily_login", "Login harian 🌱");
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">

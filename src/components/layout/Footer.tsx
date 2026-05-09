@@ -153,9 +153,9 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/50 sm:flex-row sm:gap-3 sm:px-6 md:px-[120px]">
           <p>© 2026 PACUL — Titik Nadir Team. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link href="#" className="hover:text-white/80 transition-colors">Privacy Policy</Link>
+            <span className="cursor-default text-white/40">Privacy Policy</span>
             <span className="text-white/20">|</span>
-            <Link href="#" className="hover:text-white/80 transition-colors">Terms of Use</Link>
+            <span className="cursor-default text-white/40">Terms of Use</span>
           </div>
           <p>Made with 💚 for Jawa Timur</p>
         </div>
