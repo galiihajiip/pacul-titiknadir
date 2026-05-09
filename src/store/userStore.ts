@@ -81,7 +81,15 @@ export const useUserStore = create<UserStore>()(
     }),
     {
       name: "pacul-user-store",
+      version: 2,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persisted: unknown, fromVersion: number) => {
+        const p = persisted as Partial<typeof DEMO>;
+        if (fromVersion < 2 && (!p.xp || p.xp === 0)) {
+          return { ...DEMO };
+        }
+        return p;
+      },
       partialize: (s) => ({
         xp: s.xp,
         totalXpEarned: s.totalXpEarned,

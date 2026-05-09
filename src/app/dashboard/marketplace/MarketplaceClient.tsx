@@ -108,6 +108,7 @@ function RedeemModal({
   onClose: () => void;
   onSuccess: (uv: UserVoucher) => void;
 }) {
+  // Prevent background-click close during loading or after success
   const [step, setStep] = useState<RedeemStep>("detail");
   const [agreed, setAgreed] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
@@ -128,7 +129,6 @@ function RedeemModal({
     deductXP(voucher.xpCost);
     setResultUV(result.userVoucher!);
     setStep("success");
-    onSuccess(result.userVoucher!);
   };
 
   const handleCopyCode = () => {
@@ -321,8 +321,14 @@ function RedeemModal({
                     <Download size={14} /> Simpan ke Galeri
                   </button>
                 </div>
-                <button onClick={onClose} className="w-full rounded-xl border border-[#E5E7EB] py-2.5 text-sm text-gray-500 hover:bg-gray-50 transition-colors">
-                  Tutup
+                <button
+                  onClick={() => {
+                    if (resultUV) onSuccess(resultUV);
+                    onClose();
+                  }}
+                  className="w-full rounded-xl border border-[#E5E7EB] py-2.5 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
+                >
+                  ✓ Selesai
                 </button>
               </motion.div>
             )}
@@ -454,7 +460,13 @@ function VoucherCard({
             : "bg-gray-100 text-gray-400 cursor-not-allowed"
         )}
       >
-        {owned ? "✓ Sudah Dimiliki" : voucher.stock === 0 ? "Stok Habis" : canAfford ? "Redeem" : "XP Tidak Cukup"}
+        {owned
+          ? "✓ Sudah Dimiliki"
+          : voucher.stock === 0
+          ? "Stok Habis"
+          : canAfford
+          ? "Redeem"
+          : `Butuh ${(voucher.xpCost - userXp).toLocaleString("id-ID")} XP lagi`}
       </button>
     </motion.div>
   );
@@ -678,8 +690,7 @@ export default function MarketplaceClient() {
             userXp={userXp}
             onClose={() => setRedeemTarget(null)}
             onSuccess={(uv) => {
-              setRedeemTarget(null);
-              toast.success(`Voucher "${uv.voucher.title}" berhasil diredeem! 🎉`);
+              toast.success(`🎉 Voucher "${uv.voucher.title}" berhasil diredeem!`);
             }}
           />
         )}
