@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const PALETTE = ["#2D5F3F", "#7AC74F", "#10B981", "#F59E0B", "#2D8B56", "#A8D5BA", "#5B9E2A", "#1a3d27", "#6EBF8B", "#3D7A56"];
 
@@ -58,9 +59,12 @@ export default function AnggotaAktif() {
       </div>
 
       {/* Footer link */}
-      <button className="mt-4 w-full text-center text-sm font-medium text-[#2D5F3F] hover:underline transition-colors">
+      <Link
+        href="/dashboard/collaboration"
+        className="mt-4 block w-full text-center text-sm font-medium text-[#2D5F3F] hover:underline transition-colors"
+      >
         Lihat Semua Anggota →
-      </button>
+      </Link>
     </div>
   );
 }

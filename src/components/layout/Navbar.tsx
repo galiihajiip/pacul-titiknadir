@@ -8,15 +8,7 @@ import { Bell, User, Menu, X, Pencil, LogOut, CheckCheck } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useAuthStore } from "@/store/auth.store";
 import { useAuth } from "@/hooks/useAuth";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Tracker", href: "/dashboard/tracker" },
-  { label: "EcoAction", href: "/dashboard/eco-action" },
-  { label: "Langkah", href: "/dashboard/step-tracker" },
-  { label: "Map", href: "/dashboard/map" },
-  { label: "Collaboration", href: "/dashboard/collaboration" },
-];
+import { PUBLIC_NAV } from "@/config/navigation";
 
 function LeafIcon({ className }: { className?: string }) {
   return (
@@ -77,7 +69,7 @@ export default function Navbar() {
 
           {/* Desktop nav links */}
           <ul className="hidden items-center gap-1 md:flex">
-            {NAV_LINKS.map((link) => {
+            {PUBLIC_NAV.map((link) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               return (
                 <li key={link.href}>
@@ -141,7 +133,7 @@ export default function Navbar() {
                     </ul>
                     <div className="border-t border-[#E5E7EB] px-4 py-2.5 text-center">
                       <Link href="/dashboard" onClick={() => setNotifOpen(false)} className="text-xs font-medium text-[#2D5F3F] hover:underline">
-                        Lihat semua notifikasi
+                        Lihat semua
                       </Link>
                     </div>
                   </motion.div>
@@ -253,7 +245,7 @@ export default function Navbar() {
               {/* Nav links */}
               <nav className="flex-1 overflow-y-auto p-4">
                 <ul className="flex flex-col gap-1">
-                  {NAV_LINKS.map((link, i) => {
+                  {PUBLIC_NAV.map((link, i) => {
                     const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                     return (
                       <motion.li

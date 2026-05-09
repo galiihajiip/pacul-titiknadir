@@ -4,21 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { LayoutDashboard, Activity, Zap, Map, Users, User, Footprints, ShoppingBag, Trash2, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useStepTrackerStore } from "@/store/stepTracker.store";
-
-const MENU_ITEMS = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Carbon Tracker", icon: Activity, href: "/dashboard/tracker" },
-  { label: "EcoAction", icon: Zap, href: "/dashboard/eco-action" },
-  { label: "Langkah Hijau", icon: Footprints, href: "/dashboard/step-tracker", live: true },
-  { label: "Green Market", icon: ShoppingBag, href: "/dashboard/marketplace" },
-  { label: "Laporan Sampah", icon: Trash2, href: "/dashboard/laporan-sampah" },
-  { label: "Impact Map", icon: Map, href: "/dashboard/map" },
-  { label: "Collaboration", icon: Users, href: "/dashboard/collaboration" },
-  { label: "Profile", icon: User, href: "/dashboard/profile" },
-];
+import { DASHBOARD_NAV } from "@/config/navigation";
 
 function LeafIcon({ className }: { className?: string }) {
   return (
@@ -44,8 +33,9 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3">
         <ul className="flex flex-col gap-1">
-          {MENU_ITEMS.map(({ label, icon: Icon, href, live }) => {
-            const isActive = href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
+          {DASHBOARD_NAV.map(({ label, icon: Icon, href, exact, ...rest }) => {
+            const live = 'live' in rest ? rest.live : undefined;
+            const isActive = exact ? pathname === href : pathname.startsWith(href);
             return (
               <li key={href}>
                 <Link

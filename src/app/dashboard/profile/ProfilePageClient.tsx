@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Leaf, Trophy, Star, CheckCircle, Lock, Award, Users } from "lucide-react";
 import ProfileHeader from "@/components/features/profile/ProfileHeader";
 import PageWrapper from "@/components/common/PageWrapper";
@@ -114,9 +115,12 @@ export default function ProfilePageClient() {
               ))}
             </div>
 
-            <button className="mt-4 text-xs font-medium text-[#2D5F3F] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2 rounded">
-              Lihat Semua →
-            </button>
+            <Link
+              href="/dashboard/marketplace"
+              className="mt-4 inline-block text-xs font-medium text-[#2D5F3F] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2 rounded"
+            >
+              Lihat Semua di Marketplace →
+            </Link>
           </section>
 
           <section aria-label="Aktivitas terkini" className="rounded-[12px] border border-[#E5E7EB] bg-white p-5 shadow-sm">
