@@ -227,8 +227,7 @@ function SuccessResult({ onReset, challengeId, onClaimed }: { onReset: () => voi
 /* ── Main Component ── */
 export default function BuktikanAksimu() {
   const challenges = useEcoActionStore((s) => s.challenges);
-  const userChallenges = useEcoActionStore((s) => s.userChallenges);
-  const joinedChallenges = challenges.filter((c) => userChallenges.includes(c.id));
+  const joinedChallenges = challenges.filter((c) => c.isJoined);
   const selectableChallenges = joinedChallenges.length > 0 ? joinedChallenges.map((c) => c.title) : CHALLENGES;
   const getChallengeId = (title: string) => challenges.find((c) => c.title === title)?.id ?? "c1";
 

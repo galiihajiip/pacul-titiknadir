@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { MapPin, Pencil, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth.store";
-import { useEcoActionStore } from "@/store/ecoAction.store";
+import { useUserStore } from "@/store/userStore";
 
 export default function ProfileHeader() {
   const router = useRouter();
   const storeUser = useAuthStore((s) => s.user);
-  const ecoPoints = useEcoActionStore((s) => s.ecoPoints);
+  const ecoPoints = useUserStore((s) => s.xp);
 
   const displayUser = storeUser ?? {
     avatarInitials: "AP",
