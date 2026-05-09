@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   Dot,
 } from "recharts";
-import { useAuthStore } from "@/store/auth.store";
+import { useUserStore } from "@/store/userStore";
 import {
   analyzePowerUsage,
   type HouseholdProfile,
@@ -230,8 +230,7 @@ function BenchmarkCard({ result }: { result: BenchmarkResult }) {
 
 /* ─────────────── Main Component ─────────────── */
 export default function InputListrikManual() {
-  const updateUser = useAuthStore((s) => s.updateUser);
-  const user = useAuthStore((s) => s.user);
+  const awardXP = useUserStore((s) => s.awardXP);
 
   /* Profil state */
   const [profileSaved, setProfileSaved] = useState(false);
@@ -301,8 +300,9 @@ export default function InputListrikManual() {
     if (!kwhNum || kwhNum <= 0) { toast.error("Masukkan penggunaan kWh terlebih dahulu."); return; }
     setSaving(true);
     await new Promise((r) => setTimeout(r, 900)); /* simulate API */
-    if (result?.xpEarned && user) {
-      updateUser({ xp: (user.xp ?? 0) + result.xpEarned, totalXP: (user.totalXP ?? 0) + result.xpEarned });
+    if (result?.xpEarned) {
+      const label = result.status === "sangat_hemat" ? "Listrik sangat hemat!" : "Listrik hemat bulan ini";
+      awardXP(result.xpEarned, "electricity_hemat", label);
     }
     toast.success(
       result?.xpEarned

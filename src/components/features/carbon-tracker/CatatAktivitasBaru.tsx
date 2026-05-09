@@ -6,11 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { ChevronDown, Loader2, CheckCircle } from "lucide-react";
-import type { EmissionCategory } from "@/types/carbon";
+import { useUserStore } from "@/store/userStore";
 
 /* ── Zod schema ── */
 const aktivitasSchema = z.object({
-  category: z.enum(["Transportasi", "Energi", "Limbah", "Pangan"], {
+  category: z.enum(["Transportasi", "Limbah", "Pangan", "Penghijauan"], {
     required_error: "Pilih kategori aktivitas",
   }),
   amount: z
@@ -22,25 +22,27 @@ const aktivitasSchema = z.object({
 
 type AktivitasForm = z.infer<typeof aktivitasSchema>;
 
-const CATEGORIES: EmissionCategory[] = [
+type AktivitasCategory = "Transportasi" | "Limbah" | "Pangan" | "Penghijauan";
+
+const CATEGORIES: AktivitasCategory[] = [
   "Transportasi",
-  "Energi",
   "Limbah",
   "Pangan",
+  "Penghijauan",
 ];
 
-const UNIT_MAP: Record<EmissionCategory, string> = {
+const UNIT_MAP: Record<AktivitasCategory, string> = {
   Transportasi: "km",
-  Energi: "kWh",
   Limbah: "kg",
   Pangan: "kg",
+  Penghijauan: "pohon",
 };
 
-const CATEGORY_COLORS: Record<EmissionCategory, string> = {
+const CATEGORY_COLORS: Record<AktivitasCategory, string> = {
   Transportasi: "#2D5F3F",
-  Energi: "#F59E0B",
   Limbah: "#10B981",
   Pangan: "#7AC74F",
+  Penghijauan: "#059669",
 };
 
 /* ── Toast mini ── */
@@ -65,11 +67,14 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
 
 interface CatatAktivitasBaruProps {
   onActivityAdded?: (data: AktivitasForm) => void;
+  onGoToListrik?: () => void;
 }
 
 export default function CatatAktivitasBaru({
   onActivityAdded,
+  onGoToListrik,
 }: CatatAktivitasBaruProps) {
+  const awardXP = useUserStore((s) => s.awardXP);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -99,6 +104,7 @@ export default function CatatAktivitasBaru({
     await new Promise((res) => setTimeout(res, 1500));
     setIsSubmitting(false);
     onActivityAdded?.(data);
+    awardXP(25, "add_emission", `Aktivitas ${data.category} dicatat`);
     reset({ unit: "km" });
     setToast("Aktivitas berhasil dicatat! +25 XP");
   };
@@ -201,6 +207,18 @@ export default function CatatAktivitasBaru({
             className={`${inputBase} resize-none`}
           />
         </div>
+
+        {/* Listrik redirect note */}
+        <p className="text-xs text-gray-400">
+          ⚡ Data penggunaan listrik PLN?{" "}
+          <button
+            type="button"
+            onClick={onGoToListrik}
+            className="font-medium text-[#2D5F3F] underline underline-offset-2"
+          >
+            Gunakan tab Data Listrik
+          </button>
+        </p>
 
         {/* Submit */}
         <motion.button
