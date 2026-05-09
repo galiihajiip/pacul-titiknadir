@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 import Sidebar from "@/components/layout/Sidebar";
@@ -11,6 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  useOfflineDetection();
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
