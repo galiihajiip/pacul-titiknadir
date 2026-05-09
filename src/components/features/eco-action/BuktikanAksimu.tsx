@@ -6,7 +6,7 @@ import { Upload, CheckCircle, Loader2, ChevronDown, RefreshCw } from "lucide-rea
 import { MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "@/utils/constants";
 import { toast } from "sonner";
 import { useEcoActionStore } from "@/store/ecoAction.store";
-import { useAuthStore } from "@/store/auth.store";
+import { useUserStore } from "@/store/userStore";
 
 /* ── Types ── */
 type UploadState = "idle" | "uploading" | "analyzing" | "success" | "error";
@@ -136,8 +136,8 @@ function AnalyzingSpinner() {
 /* ── Success Result ── */
 function SuccessResult({ onReset, challengeId, onClaimed }: { onReset: () => void; challengeId: string; onClaimed: () => void }) {
   const claimReward = useEcoActionStore((s) => s.claimReward);
-  const updateUser = useAuthStore((s) => s.updateUser);
-  const user = useAuthStore((s) => s.user);
+  const awardXP = useUserStore((s) => s.awardXP);
+  const incrementChallengesCompleted = useUserStore((s) => s.incrementChallengesCompleted);
   const challenges = useEcoActionStore((s) => s.challenges);
   const [claimed, setClaimed] = useState(false);
 
@@ -146,9 +146,8 @@ function SuccessResult({ onReset, challengeId, onClaimed }: { onReset: () => voi
     const challenge = challenges.find((c) => c.id === challengeId);
     const xpReward = challenge?.xpReward ?? 150;
     claimReward(challengeId);
-    if (user) {
-      updateUser({ xp: (user.xp ?? 0) + xpReward, totalXP: (user.totalXP ?? 0) + xpReward });
-    }
+    awardXP(xpReward, "challenge_complete", `Tantangan "${challenge?.title ?? ""}" diselesaikan`);
+    incrementChallengesCompleted();
     toast.success(`+${xpReward} XP earned! Reward diklaim. 🌱`);
     setClaimed(true);
     onClaimed();

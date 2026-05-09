@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
 import { Search, X, Copy, Download, ChevronDown, ChevronUp, Clock } from "lucide-react";
 import PageWrapper from "@/components/common/PageWrapper";
-import { useAuthStore } from "@/store/auth.store";
+import { useUserStore } from "@/store/userStore";
 import { useVoucherStore, type Voucher, type UserVoucher, type VoucherCategory, type VoucherStatus } from "@/store/voucher.store";
 import { cn } from "@/utils/cn";
 
@@ -113,8 +113,7 @@ function RedeemModal({
   const [termsOpen, setTermsOpen] = useState(false);
   const [resultUV, setResultUV] = useState<UserVoucher | null>(null);
   const redeemVoucher = useVoucherStore((s) => s.redeemVoucher);
-  const updateUser = useAuthStore((s) => s.updateUser);
-  const user = useAuthStore((s) => s.user);
+  const deductXP = useUserStore((s) => s.deductXP);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleRedeem = async () => {
@@ -126,9 +125,7 @@ function RedeemModal({
       onClose();
       return;
     }
-    if (user) {
-      updateUser({ xp: (user.xp ?? 0) - voucher.xpCost, totalXP: user.totalXP });
-    }
+    deductXP(voucher.xpCost);
     setResultUV(result.userVoucher!);
     setStep("success");
     onSuccess(result.userVoucher!);
@@ -546,8 +543,7 @@ function MyVouchersTab({ userVouchers }: { userVouchers: UserVoucher[] }) {
 
 /* ─── Main Client ─── */
 export default function MarketplaceClient() {
-  const user = useAuthStore((s) => s.user);
-  const userXp = user?.xp ?? 0;
+  const userXp = useUserStore((s) => s.xp);
   const { vouchers, userVouchers } = useVoucherStore();
 
   const [activeTab, setActiveTab] = useState<"catalog" | "mine">("catalog");

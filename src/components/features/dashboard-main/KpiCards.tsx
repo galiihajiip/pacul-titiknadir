@@ -4,6 +4,7 @@ import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { Leaf, Star, Target, Trophy, TrendingUp } from "lucide-react";
 import { useCountAnimation } from "@/hooks/useCountAnimation";
+import { useUserStore } from "@/store/userStore";
 
 /* ── Shared card shell ── */
 const CardShell = forwardRef<
@@ -38,7 +39,8 @@ const CardShell = forwardRef<
 
 /* ── Card 1: Carbon Saved (animated counter) ── */
 function CarbonSavedCard({ delay }: { delay: number }) {
-  const { value, ref } = useCountAnimation(450, 1500);
+  const carbonSaved = useUserStore((s) => s.carbonSaved);
+  const { value, ref } = useCountAnimation(carbonSaved, 1500);
   return (
     <CardShell ref={ref} delay={delay} iconBg="rgba(168,213,186,0.30)" iconColor="#2D5F3F" Icon={Leaf}>
       <p className="text-xs text-gray-500">Total Carbon Saved</p>
@@ -52,21 +54,23 @@ function CarbonSavedCard({ delay }: { delay: number }) {
 
 /* ── Card 2: EcoPoints (animated counter) ── */
 function EcoPointsCard({ delay }: { delay: number }) {
-  const { value, ref } = useCountAnimation(12402, 2000);
+  const xp = useUserStore((s) => s.xp);
+  const xpToNextLevel = useUserStore((s) => s.xpToNextLevel);
+  const { value, ref } = useCountAnimation(xp, 2000);
   return (
     <CardShell ref={ref} delay={delay} iconBg="rgba(245,158,11,0.18)" iconColor="#F59E0B" Icon={Star}>
       <p className="text-xs text-gray-500">EcoPoints Earned</p>
       <p className="mt-0.5 text-2xl font-bold text-[#1A1A1A]">
         {value.toLocaleString("id-ID")} <span className="text-base">⭐</span>
       </p>
-      <p className="mt-1 text-xs text-gray-400">Level Up in <span className="font-semibold text-[#F59E0B]">598 XP</span></p>
+      <p className="mt-1 text-xs text-gray-400">Level Up in <span className="font-semibold text-[#F59E0B]">{xpToNextLevel} XP</span></p>
     </CardShell>
   );
 }
 
 /* ── Card 3: Active Challenges (dot indicators) ── */
 function ChallengesCard({ delay }: { delay: number }) {
-  const filled = 3;
+  const filled = useUserStore((s) => s.challengesCompleted) % 5 || 3;
   const total = 5;
   return (
     <CardShell delay={delay} iconBg="rgba(245,158,11,0.15)" iconColor="#F59E0B" Icon={Target}>
@@ -87,10 +91,11 @@ function ChallengesCard({ delay }: { delay: number }) {
 
 /* ── Card 4: Community Rank ── */
 function RankCard({ delay }: { delay: number }) {
+  const rank = useUserStore((s) => s.rank);
   return (
     <CardShell delay={delay} iconBg="rgba(16,185,129,0.15)" iconColor="#10B981" Icon={Trophy}>
       <p className="text-xs text-gray-500">Community Rank</p>
-      <p className="mt-0.5 text-2xl font-bold text-[#1A1A1A]">#12 Surabaya</p>
+      <p className="mt-0.5 text-2xl font-bold text-[#1A1A1A]">#{rank} Surabaya</p>
       <p className="mt-1 text-xs text-gray-400">Top <span className="font-semibold text-[#10B981]">5%</span> in your area</p>
     </CardShell>
   );

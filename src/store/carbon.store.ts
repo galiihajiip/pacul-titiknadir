@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Emission, EmisiData } from "@/types/carbon";
+import { useUserStore } from "@/store/userStore";
 
 interface CarbonStore {
   emissions: Emission[];
@@ -65,6 +66,8 @@ export const useCarbonStore = create<CarbonStore>((set, get) => ({
       emissions: [newEmission, ...state.emissions],
       totalCarbonSaved: state.totalCarbonSaved + newEmission.impact,
     }));
+    useUserStore.getState().awardXP(25, "add_emission", "Aktivitas dicatat");
+    useUserStore.getState().addCarbonSaved(newEmission.impact);
   },
 
   setView: (view) => set({ selectedView: view }),

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { toast } from "sonner";
 import { useEcoActionStore } from "@/store/ecoAction.store";
+import { useUserStore } from "@/store/userStore";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Zap, Trash2, Bus, Clock, Users, CheckCircle } from "lucide-react";
@@ -205,6 +206,8 @@ export default function TantanganAktif() {
     INITIAL_CHALLENGES.map((c) => ({ ...c, isJoined: userChallenges.includes(c.id) }))
   );
 
+  const awardXP = useUserStore((s) => s.awardXP);
+
   const handleJoin = (id: string) => {
     const challenge = challenges.find((c) => c.id === id);
     if (!challenge) return;
@@ -212,7 +215,8 @@ export default function TantanganAktif() {
     setChallenges((prev) =>
       prev.map((c) => (c.id === id ? { ...c, isJoined: true, participants: c.participants + 1 } : c))
     );
-    toast.success(`Kamu bergabung tantangan \u2018${challenge.title}\u2019! Selesaikan untuk +${challenge.xpReward} XP 💪`);
+    awardXP(10, "challenge_join", `Bergabung tantangan "${challenge.title}"`);
+    toast.success(`+10 XP! Kamu bergabung tantangan ‘${challenge.title}’ 💪`);
   };
 
   return (
