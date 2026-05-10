@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Home } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useStepTrackerStore } from "@/store/stepTracker.store";
 import { DASHBOARD_NAV } from "@/config/navigation";
@@ -53,7 +53,15 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-[#E5E7EB] p-4">
+      <div className="border-t border-[#E5E7EB] p-4 flex flex-col gap-3">
+        <Link
+          href="/"
+          onClick={onLinkClick}
+          className="flex items-center gap-2 rounded-md border border-[#E5E7EB] px-3 py-2 text-xs font-medium text-gray-500 hover:border-[#2D5F3F] hover:bg-[#F0FAF4] hover:text-[#2D5F3F] transition-colors"
+        >
+          <Home size={14} className="shrink-0" />
+          Kembali ke Beranda
+        </Link>
         <p className="text-xs text-gray-400">© 2026 PACUL · Titik Nadir</p>
       </div>
     </div>
