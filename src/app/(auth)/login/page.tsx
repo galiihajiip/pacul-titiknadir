@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/auth.store";
+import Cookies from "js-cookie";
 
 const GUEST_USER = {
   id: "guest",
@@ -42,12 +43,14 @@ export default function LoginPage() {
 
   const handleGuestLogin = async () => {
     setGuestLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
+    await new Promise((r) => setTimeout(r, 600));
+    Cookies.set("pacul_token", "guest_token_demo", { expires: 1, sameSite: "lax" });
+    localStorage.setItem("pacul_token", "guest_token_demo");
     setUser(GUEST_USER as Parameters<typeof setUser>[0]);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
@@ -216,7 +219,28 @@ export default function LoginPage() {
             )}
           </motion.button>
 
-          <p className="mt-5 text-center text-sm text-gray-500">
+          {/* Demo credentials info */}
+          <div className="mt-5 rounded-xl border border-[#A8D5BA] bg-[#F0FAF4] px-4 py-3">
+            <p className="mb-1.5 text-xs font-semibold text-[#2D5F3F]">🧪 Akun Demo (login biasa)</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Email: <span className="font-mono font-semibold text-[#1A1A1A]">demo@pacul.app</span></p>
+                <p className="text-xs text-gray-600">Password: <span className="font-mono font-semibold text-[#1A1A1A]">Demo1234!</span></p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("email", "demo@pacul.app", { shouldValidate: true });
+                  setValue("password", "Demo1234!", { shouldValidate: true });
+                }}
+                className="rounded-lg bg-[#2D5F3F] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#245033] transition-colors"
+              >
+                Isi Otomatis
+              </button>
+            </div>
+          </div>
+
+          <p className="mt-4 text-center text-sm text-gray-500">
             Belum punya akun?{" "}
             <Link href="/register" className="font-semibold text-[#2D5F3F] hover:underline">
               Daftar sekarang
