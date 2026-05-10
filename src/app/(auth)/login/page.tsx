@@ -42,8 +42,7 @@ export default function LoginPage() {
         style={{ background: "linear-gradient(145deg, #1a3d28 0%, #2D5F3F 55%, #3a7a52 100%)" }}
       >
         <div className="flex flex-col items-center gap-4 text-center">
-          <Image src="/logo-white.png" alt="PACUL Logo" width={64} height={64} className="h-16 w-16 object-contain" />
-          <h1 className="text-4xl font-extrabold tracking-tight text-white">PACUL</h1>
+          <Image src="/logo-white.png" alt="PACUL" width={180} height={60} className="h-16 w-auto object-contain" />
           <p className="text-lg font-medium text-white/70">Platform Aksi Komunitas untuk Lingkungan</p>
         </div>
 
@@ -65,9 +64,8 @@ export default function LoginPage() {
       {/* ── Right panel — Form ── */}
       <div className="flex flex-1 flex-col items-center justify-center bg-white px-6 py-12 lg:px-16">
         {/* Mobile logo */}
-        <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <Image src="/logo.png" alt="PACUL Logo" width={36} height={36} className="h-9 w-9 object-contain" />
-          <span className="text-xl font-bold text-[#2D5F3F]">PACUL</span>
+        <div className="mb-8 flex items-center justify-center lg:hidden">
+          <Image src="/logo.png" alt="PACUL" width={140} height={48} className="h-12 w-auto object-contain" />
         </div>
 
         <div className="w-full max-w-md">

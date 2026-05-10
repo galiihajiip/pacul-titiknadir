@@ -54,9 +54,8 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: "#2D5F3F" }}>
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           {/* Logo */}
-          <Link href="/" className="flex shrink-0 items-center gap-2">
-            <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
-            <span className="text-xl font-bold tracking-wide text-white">PACUL</span>
+          <Link href="/" className="flex shrink-0 items-center">
+            <Image src="/logo-white.png" alt="PACUL" width={120} height={40} className="h-10 w-auto object-contain" />
           </Link>
 
           {/* Desktop nav links */}
@@ -225,9 +224,8 @@ export default function Navbar() {
             >
               {/* Drawer header */}
               <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
-                <Link href="/" onClick={close} className="flex items-center gap-2">
-                  <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
-                  <span className="text-xl font-bold tracking-wide text-white">PACUL</span>
+                <Link href="/" onClick={close} className="flex items-center">
+                  <Image src="/logo-white.png" alt="PACUL" width={120} height={40} className="h-10 w-auto object-contain" />
                 </Link>
                 <button onClick={close} aria-label="Tutup menu" className="rounded-md p-1.5 text-white/70 hover:bg-white/10 hover:text-white">
                   <X size={20} />

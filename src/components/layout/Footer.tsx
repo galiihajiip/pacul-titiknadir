@@ -44,9 +44,8 @@ export default function Footer() {
 
           {/* Col 1 — Brand */}
           <div className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2 w-fit">
-              <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
-              <span className="text-xl font-bold text-white tracking-wide">PACUL</span>
+            <Link href="/" className="flex items-center w-fit">
+              <Image src="/logo-white.png" alt="PACUL" width={120} height={40} className="h-10 w-auto object-contain" />
             </Link>
             <p className="text-sm italic text-white/60 leading-relaxed">
               &ldquo;Ubah Aksi Jadi Dampak Nyata&rdquo;

@@ -17,9 +17,8 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 border-b border-[#E5E7EB] px-4">
-        <Image src="/logo.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
-        <span className="text-xl font-bold tracking-wide text-[#2D5F3F]">PACUL</span>
+      <div className="flex h-16 items-center border-b border-[#E5E7EB] px-4">
+        <Image src="/logo.png" alt="PACUL" width={120} height={40} className="h-10 w-auto object-contain" />
       </div>
 
       {/* Navigation */}

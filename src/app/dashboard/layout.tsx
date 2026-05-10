@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { useSSE } from "@/hooks/useSSE";
 import { AnimatePresence } from "framer-motion";
@@ -44,7 +45,7 @@ export default function DashboardLayout({
           >
             <Menu size={22} aria-hidden="true" />
           </button>
-          <span className="ml-3 text-sm font-semibold text-[#2D5F3F]">PACUL Dashboard</span>
+          <Image src="/logo.png" alt="PACUL" width={100} height={32} className="ml-3 h-8 w-auto object-contain" />
         </header>
 
         <main id="main-content" className="flex-1 overflow-y-auto p-4 lg:p-6" role="main">
