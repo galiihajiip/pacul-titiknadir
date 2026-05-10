@@ -36,21 +36,28 @@ export async function POST(req: NextRequest) {
   const VISION_API_KEY = process.env.GOOGLE_VISION_API_KEY ?? process.env.NEXT_PUBLIC_GOOGLE_VISION_API_KEY ?? "";
   const VISION_URL = `${VISION_ENDPOINT}?key=${VISION_API_KEY}`;
 
+  console.log("[OCR] POST called, key length:", VISION_API_KEY.length);
+
   try {
     if (!VISION_API_KEY) {
+      console.error("[OCR] No API key found");
       return NextResponse.json({ success: false, message: "Vision API key tidak dikonfigurasi" }, { status: 500 });
     }
 
     const formData = await req.formData();
     const file = formData.get("image") as File | null;
     if (!file) {
+      console.error("[OCR] No file in formdata");
       return NextResponse.json({ success: false, message: "File gambar tidak ditemukan" }, { status: 400 });
     }
+
+    console.log("[OCR] File received:", file.name, file.size, "bytes", file.type);
 
     /* Convert to base64 */
     const bytes = await file.arrayBuffer();
     const base64 = Buffer.from(bytes).toString("base64");
-    const mimeType = file.type || "image/jpeg";
+
+    console.log("[OCR] Calling Vision API, base64 length:", base64.length);
 
     /* Call Google Vision API */
     const visionRes = await fetch(VISION_URL, {
@@ -65,10 +72,14 @@ export async function POST(req: NextRequest) {
       }),
     });
 
+    console.log("[OCR] Vision API response status:", visionRes.status);
+
     if (!visionRes.ok) {
       const errText = await visionRes.text();
-      console.error("[Vision API Error]", errText);
-      return NextResponse.json({ success: false, message: "Google Vision API error" }, { status: 502 });
+      console.error("[OCR] Vision API Error:", errText);
+      let errMsg = "Google Vision API error";
+      try { errMsg = (JSON.parse(errText) as { error?: { message?: string } }).error?.message ?? errMsg; } catch {}
+      return NextResponse.json({ success: false, message: errMsg }, { status: 502 });
     }
 
     const visionData = await visionRes.json() as {
