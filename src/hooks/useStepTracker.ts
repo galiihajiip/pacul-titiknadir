@@ -26,8 +26,9 @@ const INITIAL: StepData = {
   duration: 0,
 };
 
-const THRESHOLD = 10.5;
-const MIN_STEP_INTERVAL = 300;
+const THRESHOLD = 1.8;        // delta setelah gravity dihilangkan
+const MIN_STEP_INTERVAL = 250; // ms minimum antar langkah
+const GRAVITY_ALPHA = 0.8;     // low-pass filter alpha
 
 export function useStepTracker() {
   const [data, setData] = useState<StepData>(INITIAL);
@@ -36,14 +37,26 @@ export function useStepTracker() {
   const lastMagnitude = useRef(0);
   const lastPeak = useRef(false);
   const lastStepTime = useRef(0);
+  const gravityRef = useRef({ x: 0, y: 0, z: 9.8 });
 
   const detectStep = useCallback((x: number, y: number, z: number) => {
-    const magnitude = Math.sqrt(x * x + y * y + z * z);
-    const delta = Math.abs(magnitude - lastMagnitude.current);
+    /* Low-pass filter to isolate gravity */
+    const g = gravityRef.current;
+    g.x = GRAVITY_ALPHA * g.x + (1 - GRAVITY_ALPHA) * x;
+    g.y = GRAVITY_ALPHA * g.y + (1 - GRAVITY_ALPHA) * y;
+    g.z = GRAVITY_ALPHA * g.z + (1 - GRAVITY_ALPHA) * z;
+
+    /* High-pass: linear acceleration without gravity */
+    const lx = x - g.x;
+    const ly = y - g.y;
+    const lz = z - g.z;
+    const magnitude = Math.sqrt(lx * lx + ly * ly + lz * lz);
+
     const now = Date.now();
 
+    /* Peak detection */
     if (
-      delta > THRESHOLD &&
+      magnitude > THRESHOLD &&
       !lastPeak.current &&
       now - lastStepTime.current > MIN_STEP_INTERVAL
     ) {
@@ -60,7 +73,7 @@ export function useStepTracker() {
           xpEarned: Math.floor(newSteps / 100),
         };
       });
-    } else if (delta < THRESHOLD / 2) {
+    } else if (magnitude < THRESHOLD * 0.5) {
       lastPeak.current = false;
     }
 
@@ -138,6 +151,7 @@ export function useStepTracker() {
     lastMagnitude.current = 0;
     lastPeak.current = false;
     lastStepTime.current = 0;
+    gravityRef.current = { x: 0, y: 0, z: 9.8 };
   }, [stopTracking]);
 
   useEffect(() => {

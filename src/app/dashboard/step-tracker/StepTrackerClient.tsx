@@ -112,6 +112,7 @@ export default function StepTrackerClient() {
   const user = useAuthStore((s) => s.user);
 
   const [desktop, setDesktop] = useState(false);
+  const [needsHttps, setNeedsHttps] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [milestones, setMilestones] = useState({
     m1000: false,
@@ -119,9 +120,12 @@ export default function StepTrackerClient() {
     m10000: false,
   });
 
-  /* Detect desktop on mount */
+  /* Detect desktop + HTTPS requirement on mount */
   useEffect(() => {
     setDesktop(isDesktop());
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isHttps = location.protocol === "https:";
+    if (isIOS && !isHttps) setNeedsHttps(true);
   }, []);
 
   /* Sync steps to store */
@@ -214,6 +218,25 @@ export default function StepTrackerClient() {
               Kamu menggunakan <strong>desktop</strong>. Step tracker berjalan dalam{" "}
               <strong>mode simulasi</strong> untuk demo.
             </p>
+          </div>
+        )}
+
+        {/* ── HTTPS required (iOS) ── */}
+        {needsHttps && (
+          <div className="mb-4 flex items-start gap-3 rounded-xl border border-orange-400/30 bg-orange-400/10 px-4 py-3">
+            <span className="text-lg">🔒</span>
+            <div>
+              <p className="text-sm font-semibold text-orange-200">Sensor gerak butuh HTTPS</p>
+              <p className="mt-0.5 text-xs text-orange-200/70">
+                iOS Safari memblokir akses sensor di HTTP. Buka lewat URL <strong>https://</strong> atau gunakan mode simulasi.
+              </p>
+              <button
+                onClick={() => tracker.startSimulation()}
+                className="mt-2 rounded-lg bg-orange-500/30 px-3 py-1.5 text-xs font-semibold text-orange-100 hover:bg-orange-500/50 transition-colors"
+              >
+                Gunakan Mode Simulasi
+              </button>
+            </div>
           </div>
         )}
 
