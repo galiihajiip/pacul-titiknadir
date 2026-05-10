@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, User, MapPin, Leaf, CheckCircle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, User, MapPin, CheckCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
@@ -164,9 +165,7 @@ export default function RegisterPage() {
           style={{ background: "linear-gradient(145deg, #1a3d28 0%, #2D5F3F 55%, #3a7a52 100%)" }}
         >
           <div className="flex flex-col items-center gap-4 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20">
-              <Leaf size={32} className="text-white" />
-            </div>
+            <Image src="/logo-white.png" alt="PACUL Logo" width={64} height={64} className="h-16 w-16 object-contain" />
             <h1 className="text-4xl font-extrabold tracking-tight text-white">PACUL</h1>
             <p className="text-base font-medium text-white/70">Bergabunglah bersama ribuan aktivis lingkungan Jawa Timur</p>
           </div>
@@ -188,9 +187,7 @@ export default function RegisterPage() {
         {/* ── Right panel ── */}
         <div className="flex flex-1 flex-col items-center justify-center bg-white px-6 py-12 lg:px-16">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2D5F3F]">
-              <Leaf size={18} className="text-white" />
-            </div>
+            <Image src="/logo.png" alt="PACUL Logo" width={36} height={36} className="h-9 w-9 object-contain" />
             <span className="text-xl font-bold text-[#2D5F3F]">PACUL</span>
           </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,15 +10,6 @@ import { cn } from "@/utils/cn";
 import { useAuthStore } from "@/store/auth.store";
 import { useAuth } from "@/hooks/useAuth";
 import { PUBLIC_NAV } from "@/config/navigation";
-
-function LeafIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path d="M12 2C6 2 3 8 3 12c0 3.5 2.5 6.5 6 7.5V22h2v-2.5c3.5-1 6-4 6-7.5 0-4-3-10-5-10z" fill="#7AC74F" />
-      <path d="M12 2c2 2 5 8 5 10a7 7 0 01-5 6.7V2z" fill="#5aad36" opacity="0.7" />
-    </svg>
-  );
-}
 
 const MOCK_NOTIFS = [
   { id: "n1", text: "Tantangan 'Zero Waste' berakhir dalam 2 hari!", time: "1j lalu", read: false },
@@ -63,7 +55,7 @@ export default function Navbar() {
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center gap-2">
-            <LeafIcon className="h-8 w-8" />
+            <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
             <span className="text-xl font-bold tracking-wide text-white">PACUL</span>
           </Link>
 
@@ -234,7 +226,7 @@ export default function Navbar() {
               {/* Drawer header */}
               <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
                 <Link href="/" onClick={close} className="flex items-center gap-2">
-                  <LeafIcon className="h-8 w-8" />
+                  <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
                   <span className="text-xl font-bold tracking-wide text-white">PACUL</span>
                 </Link>
                 <button onClick={close} aria-label="Tutup menu" className="rounded-md p-1.5 text-white/70 hover:bg-white/10 hover:text-white">

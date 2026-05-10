@@ -1,17 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Instagram, Linkedin, Mail, MapPin } from "lucide-react";
-
-function LeafIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M12 2C6 2 3 8 3 12c0 3.5 2.5 6.5 6 7.5V22h2v-2.5c3.5-1 6-4 6-7.5 0-4-3-10-5-10z"
-        fill="#7AC74F"
-      />
-      <path d="M12 2c2 2 5 8 5 10a7 7 0 01-5 6.7V2z" fill="#5aad36" opacity="0.7" />
-    </svg>
-  );
-}
 
 const FEATURE_LINKS = [
   { label: "Carbon Tracker", href: "/dashboard/tracker" },
@@ -56,7 +45,7 @@ export default function Footer() {
           {/* Col 1 — Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 w-fit">
-              <LeafIcon className="h-8 w-8" />
+              <Image src="/logo-white.png" alt="PACUL Logo" width={32} height={32} className="h-8 w-8 object-contain" />
               <span className="text-xl font-bold text-white tracking-wide">PACUL</span>
             </Link>
             <p className="text-sm italic text-white/60 leading-relaxed">

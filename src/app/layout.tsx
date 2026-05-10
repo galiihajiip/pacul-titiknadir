@@ -16,6 +16,13 @@ export const metadata: Metadata = {
   description:
     "Platform web inovatif yang memberdayakan komunitas lokal dalam mengambil tindakan nyata terhadap perubahan iklim. Lacak jejak karbon, ikuti tantangan hijau, dan berkolaborasi bersama komunitas.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: { capable: true, statusBarStyle: "default", title: "PACUL" },
 };
 

@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Leaf } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const schema = z.object({
@@ -15,19 +16,10 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-function LeafLogo() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 2C6 8 4 12 4 16a8 8 0 0016 0c0-4-2-8-8-14z" fill="white" opacity="0.9" />
-      <path d="M12 2c2 2 5 8 5 10a7 7 0 01-5 6.7V2z" fill="white" opacity="0.5" />
-    </svg>
-  );
-}
-
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
-  const { loginMutation, loginAsGuest } = useAuth();
+  const { loginMutation } = useAuth();
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -50,7 +42,7 @@ export default function LoginPage() {
         style={{ background: "linear-gradient(145deg, #1a3d28 0%, #2D5F3F 55%, #3a7a52 100%)" }}
       >
         <div className="flex flex-col items-center gap-4 text-center">
-          <LeafLogo />
+          <Image src="/logo-white.png" alt="PACUL Logo" width={64} height={64} className="h-16 w-16 object-contain" />
           <h1 className="text-4xl font-extrabold tracking-tight text-white">PACUL</h1>
           <p className="text-lg font-medium text-white/70">Platform Aksi Komunitas untuk Lingkungan</p>
         </div>
@@ -74,9 +66,7 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col items-center justify-center bg-white px-6 py-12 lg:px-16">
         {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2D5F3F]">
-            <Leaf size={18} className="text-white" />
-          </div>
+          <Image src="/logo.png" alt="PACUL Logo" width={36} height={36} className="h-9 w-9 object-contain" />
           <span className="text-xl font-bold text-[#2D5F3F]">PACUL</span>
         </div>
 
@@ -172,21 +162,6 @@ export default function LoginPage() {
               ) : "Masuk"}
             </motion.button>
 
-            {/* Divider */}
-            <div className="flex items-center gap-3">
-              <div className="h-px flex-1 bg-[#E5E7EB]" />
-              <span className="text-xs text-gray-400">atau</span>
-              <div className="h-px flex-1 bg-[#E5E7EB]" />
-            </div>
-
-            {/* Guest login */}
-            <button
-              type="button"
-              onClick={loginAsGuest}
-              className="w-full rounded-lg border border-[#E5E7EB] py-2.5 text-sm font-medium text-gray-600 transition hover:border-[#2D5F3F] hover:text-[#2D5F3F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
-            >
-              Coba sebagai Guest 👀
-            </button>
           </motion.form>
 
           <p className="mt-6 text-center text-sm text-gray-500">
