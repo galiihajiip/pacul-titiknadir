@@ -70,18 +70,18 @@ async function callOcrApi(file: File, onProgress: (p: number) => void): Promise<
       rawText: json.raw_text,
     };
   } catch (err) {
-    /* ── DEMO FALLBACK: simulate OCR result when backend not available ── */
+    /* ── DEMO FALLBACK: API tidak tersedia, kembalikan data contoh ── */
     onProgress(100);
     await new Promise((r) => setTimeout(r, 1200));
     return {
-      kwh: 187,
-      tagihan: 284750,
-      noPelanggan: "5218083456789",
-      namaPelanggan: "ADITYA PRATAMA",
-      bulanTagihan: "OKTOBER 2026",
-      dayaVA: "2200",
-      confidence: 92,
-      rawText: "[DEMO MODE — backend tidak tersambung]",
+      kwh: undefined,
+      tagihan: undefined,
+      noPelanggan: undefined,
+      namaPelanggan: undefined,
+      bulanTagihan: undefined,
+      dayaVA: undefined,
+      confidence: 0,
+      rawText: "[DEMO — Vision API belum aktif. Lengkapi data secara manual.]",
     };
   }
 }
