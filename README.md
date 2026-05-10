@@ -163,7 +163,9 @@ PACUL menggunakan palet warna berbasis alam dengan aksen modern:
 
 | Nama | Role |
 |------|------|
-| Galih Aji IP | Lead Developer & UI Designer |
+| M. Ananda H |  System Analyst business      |
+| Cleo Firman  |  UI Designer                 |
+| Galih Aji IP | Fullstack Developer          |
 
 ---
 
