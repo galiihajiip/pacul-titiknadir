@@ -3,12 +3,28 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/store/auth.store";
+
+const GUEST_USER = {
+  id: "guest",
+  name: "Tamu PACUL",
+  email: "tamu@pacul.app",
+  level: 5,
+  current_xp: 1250,
+  total_xp: 4200,
+  city: "Surabaya",
+  district: "Wonokromo",
+  role: "user",
+  avatarColor: "#2D5F3F",
+  joinedAt: new Date().toISOString(),
+} as const;
 
 const schema = z.object({
   email: z.string().email("Format email tidak valid"),
@@ -19,7 +35,17 @@ type FormValues = z.infer<typeof schema>;
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const { loginMutation } = useAuth();
+  const setUser = useAuthStore((s) => s.setUser);
+  const router = useRouter();
+
+  const handleGuestLogin = async () => {
+    setGuestLoading(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setUser(GUEST_USER as Parameters<typeof setUser>[0]);
+    router.push("/dashboard");
+  };
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -162,7 +188,35 @@ export default function LoginPage() {
 
           </motion.form>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
+          {/* Divider */}
+          <div className="my-5 flex items-center gap-3">
+            <div className="flex-1 border-t border-[#E5E7EB]" />
+            <span className="text-xs text-gray-400">atau</span>
+            <div className="flex-1 border-t border-[#E5E7EB]" />
+          </div>
+
+          {/* Guest login */}
+          <motion.button
+            type="button"
+            onClick={handleGuestLogin}
+            disabled={guestLoading}
+            whileTap={{ scale: 0.98 }}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-[#2D5F3F] py-3 text-sm font-semibold text-[#2D5F3F] transition hover:bg-[#F0FAF4] disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5F3F] focus-visible:ring-offset-2"
+          >
+            {guestLoading ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#2D5F3F]/30 border-t-[#2D5F3F]" />
+                Masuk...
+              </>
+            ) : (
+              <>
+                <Users size={16} />
+                Masuk sebagai Tamu
+              </>
+            )}
+          </motion.button>
+
+          <p className="mt-5 text-center text-sm text-gray-500">
             Belum punya akun?{" "}
             <Link href="/register" className="font-semibold text-[#2D5F3F] hover:underline">
               Daftar sekarang
