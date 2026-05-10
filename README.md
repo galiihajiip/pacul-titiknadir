@@ -27,12 +27,14 @@ PACUL (Platform Aksi Komunitas Untuk Lingkungan) adalah platform web inovatif ya
 | UI Components | shadcn/ui |
 | Icons | Lucide React |
 | Charts | Recharts |
-| Maps | Leaflet.js |
+| Maps | Leaflet.js + Google Maps API |
 | State Management | Zustand |
 | Data Fetching | TanStack Query (React Query v5) |
 | HTTP Client | Axios |
 | Animations | Framer Motion |
 | Form Handling | React Hook Form + Zod |
+| OCR | Google Cloud Vision API |
+| PWA | next-pwa + Web Push |
 | Linting | ESLint + Prettier |
 
 ---
@@ -163,7 +165,9 @@ PACUL menggunakan palet warna berbasis alam dengan aksen modern:
 
 | Nama | Role |
 |------|------|
-| Galih Aji IP | Lead Developer & UI Designer |
+| Galih Aji IP | Lead Developer & AI Engineer |
+| Cleo Firman Ferdinand | UI/UX Designer |
+| Muhammad Ananda Hariadi | Fullstack Web Developer |
 
 ---
 
