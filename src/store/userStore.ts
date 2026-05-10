@@ -21,9 +21,12 @@ interface UserStore {
 
   syncFromServer: (data: { current_xp: number; total_xp: number; level: number }) => void;
   addXPEvent: (amount: number, source: string, label: string) => void;
+  awardXP: (amount: number, source: string, label: string) => void;
+  deductXP: (amount: number) => void;
   addCarbonSaved: (kg: number) => void;
   incrementChallengesCompleted: () => void;
   reset: () => void;
+  resetToDemo: () => void;
 }
 
 function calcXpToNext(level: number, totalXp: number): number {
@@ -78,6 +81,11 @@ export const useUserStore = create<UserStore>()(
         });
       },
 
+      awardXP: (amount, source, label) => get().addXPEvent(amount, source, label),
+
+      deductXP: (amount) =>
+        set((s) => ({ xp: Math.max(0, s.xp - amount) })),
+
       addCarbonSaved: (kg) =>
         set((s) => ({ carbonSaved: +(s.carbonSaved + kg).toFixed(3) })),
 
@@ -85,6 +93,7 @@ export const useUserStore = create<UserStore>()(
         set((s) => ({ challengesCompleted: s.challengesCompleted + 1 })),
 
       reset: () => set(INITIAL_STATE),
+      resetToDemo: () => set(INITIAL_STATE),
     }),
     {
       name: "pacul-user-store",

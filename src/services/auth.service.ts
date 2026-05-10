@@ -8,6 +8,9 @@ export interface RegisterDTO {
   password_confirmation: string;
   city?: string;
   district?: string;
+  location?: string;
+  kecamatan?: string;
+  bio?: string;
 }
 
 export interface LoginDTO {
@@ -25,12 +28,20 @@ export interface UpdateProfileDTO {
   name?: string;
   city?: string;
   district?: string;
+  location?: string;
+  kecamatan?: string;
+  bio?: string;
+  avatarColor?: string;
+  avatarUrl?: string;
+  preferences?: import("@/store/auth.store").UserPreferences;
 }
 
 export interface ChangePasswordDTO {
   current_password: string;
-  new_password: string;
-  new_password_confirmation: string;
+  new_password?: string;
+  new_password_confirmation?: string;
+  password?: string;
+  password_confirmation?: string;
 }
 
 export const authService = {
@@ -70,7 +81,7 @@ export const authService = {
     await api.put("/auth/password", data);
   },
 
-  deleteAccount: async (password: string): Promise<void> => {
+  deleteAccount: async (password?: string): Promise<void> => {
     await api.delete("/auth/account", { data: { password } });
   },
 };

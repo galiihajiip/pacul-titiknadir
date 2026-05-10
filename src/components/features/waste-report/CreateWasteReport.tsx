@@ -9,7 +9,7 @@ import { useWasteReportStore, CATEGORY_CONFIG, SEVERITY_CONFIG, type WasteCatego
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/utils/cn";
 
-const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "";
+const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 const SURABAYA_CENTER = { lat: -7.2575, lng: 112.7521 };
 
 const CATEGORIES = Object.entries(CATEGORY_CONFIG) as [WasteCategory, typeof CATEGORY_CONFIG[WasteCategory]][];
@@ -78,7 +78,7 @@ function LocationPickerMap({ lat, lng, onChange }: { lat: number | null; lng: nu
       <div>
         <MapPin size={32} className="mx-auto text-[#2D5F3F]" />
         <p className="mt-2 text-sm font-semibold text-[#2D5F3F]">{lat ? `📍 Pin diset` : "Klik untuk set lokasi"}</p>
-        <p className="text-xs text-gray-400 mt-0.5">(Demo: tambahkan NEXT_PUBLIC_GOOGLE_MAPS_KEY untuk peta nyata)</p>
+        <p className="text-xs text-gray-400 mt-0.5">(Demo: tambahkan NEXT_PUBLIC_GOOGLE_MAPS_API_KEY untuk peta nyata)</p>
         {lat && <p className="mt-1 text-xs text-gray-500">{lat.toFixed(5)}, {lng?.toFixed(5)}</p>}
       </div>
     </div>

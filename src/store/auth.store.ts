@@ -15,6 +15,7 @@ export interface User {
   city?: string;
   district?: string;
   avatar_url?: string;
+  avatarUrl?: string;
   level: number;
   current_xp: number;
   total_xp: number;

@@ -9,7 +9,9 @@ export interface GovUser {
   email: string;
   role: "admin" | "government";
   government_unit: string;
+  governmentUnit?: string;
   avatar_url?: string;
+  avatarInitials?: string;
 }
 
 interface GovAuthStore {
@@ -40,7 +42,15 @@ export const useGovAuthStore = create<GovAuthStore>()(
           });
           localStorage.setItem("pacul_token", response.token);
 
-          set({ user: response.user, isAuthenticated: true });
+          const u = response.user;
+          set({
+            user: {
+              ...u,
+              governmentUnit: u.governmentUnit ?? u.government_unit,
+              avatarInitials: u.avatarInitials ?? u.name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase(),
+            },
+            isAuthenticated: true,
+          });
           return { success: true };
         } catch (err: unknown) {
           const error = err as { message?: string };
@@ -59,7 +69,14 @@ export const useGovAuthStore = create<GovAuthStore>()(
         set({ user: null, isAuthenticated: false });
       },
 
-      setUser: (user) => set({ user, isAuthenticated: true }),
+      setUser: (user) => set({
+        user: {
+          ...user,
+          governmentUnit: user.governmentUnit ?? user.government_unit,
+          avatarInitials: user.avatarInitials ?? user.name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase(),
+        },
+        isAuthenticated: true,
+      }),
     }),
     {
       name: "pacul-gov-auth",

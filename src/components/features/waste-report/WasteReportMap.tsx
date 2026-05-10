@@ -16,7 +16,7 @@ import {
 import { cn } from "@/utils/cn";
 
 const SURABAYA_CENTER = { lat: -7.2575, lng: 112.7521 };
-const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "";
+const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 
 /* ── Marker pin SVG by severity ── */
 function MarkerPin({ severity, status }: { severity: WasteReport["severity"]; status: WasteReport["status"] }) {
@@ -180,7 +180,7 @@ function FallbackMap({ reports, onSelectReport }: { reports: WasteReport[]; onSe
       <div className="relative z-10 text-center">
         <MapPin size={40} className="mx-auto text-[#2D5F3F]" />
         <p className="mt-2 font-bold text-[#2D5F3F]">Peta Surabaya</p>
-        <p className="text-xs text-gray-500 mt-1">Tambahkan NEXT_PUBLIC_GOOGLE_MAPS_KEY untuk peta live</p>
+        <p className="text-xs text-gray-500 mt-1">Tambahkan NEXT_PUBLIC_GOOGLE_MAPS_API_KEY untuk peta live</p>
       </div>
       {/* Pin list overlay */}
       <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2 justify-center">
