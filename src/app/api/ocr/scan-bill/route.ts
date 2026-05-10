@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const VISION_API_KEY = process.env.GOOGLE_VISION_API_KEY ?? process.env.NEXT_PUBLIC_GOOGLE_VISION_API_KEY ?? "";
-const VISION_URL = `https://vision.googleapis.com/v1/images:annotate?key=${VISION_API_KEY}`;
+const VISION_ENDPOINT = "https://vision.googleapis.com/v1/images:annotate";
 
 /* ── Regex patterns for PLN bill fields ── */
 const PATTERNS = {
@@ -34,6 +33,9 @@ function scoreConfidence(kwh?: number, tagihan?: number, noPelanggan?: string): 
 }
 
 export async function POST(req: NextRequest) {
+  const VISION_API_KEY = process.env.GOOGLE_VISION_API_KEY ?? process.env.NEXT_PUBLIC_GOOGLE_VISION_API_KEY ?? "";
+  const VISION_URL = `${VISION_ENDPOINT}?key=${VISION_API_KEY}`;
+
   try {
     if (!VISION_API_KEY) {
       return NextResponse.json({ success: false, message: "Vision API key tidak dikonfigurasi" }, { status: 500 });

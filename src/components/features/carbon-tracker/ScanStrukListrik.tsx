@@ -70,19 +70,9 @@ async function callOcrApi(file: File, onProgress: (p: number) => void): Promise<
       rawText: json.raw_text,
     };
   } catch (err) {
-    /* ── DEMO FALLBACK: API tidak tersedia, kembalikan data contoh ── */
     onProgress(100);
-    await new Promise((r) => setTimeout(r, 1200));
-    return {
-      kwh: undefined,
-      tagihan: undefined,
-      noPelanggan: undefined,
-      namaPelanggan: undefined,
-      bulanTagihan: undefined,
-      dayaVA: undefined,
-      confidence: 0,
-      rawText: "[DEMO — Vision API belum aktif. Lengkapi data secara manual.]",
-    };
+    const msg = err instanceof Error ? err.message : "Gagal menghubungi server OCR";
+    throw new Error(msg);
   }
 }
 
@@ -309,20 +299,20 @@ export default function ScanStrukListrik() {
     setUploadProgress(0);
 
     try {
-      const res = await callOcrApi(file, setUploadProgress);
       setScanState("processing");
-      await new Promise((r) => setTimeout(r, 3200)); /* simulate AI time */
+      const res = await callOcrApi(file, setUploadProgress);
 
       setResult(res);
+      setEditKwh(res.kwh?.toString() ?? "");
+      setEditTagihan(res.tagihan?.toString() ?? "");
+
       if (res.confidence >= 60) {
         setScanState("success");
         toast.success(`Struk berhasil dibaca! Akurasi ${res.confidence}%`);
       } else {
         setScanState("partial");
-        toast("Beberapa data tidak terbaca sempurna. Lengkapi manual.", { icon: "⚠️" });
+        toast("Lengkapi data yang tidak terbaca secara manual.", { icon: "⚠️" });
       }
-      setEditKwh(res.kwh?.toString() ?? "");
-      setEditTagihan(res.tagihan?.toString() ?? "");
     } catch (err) {
       setScanState("error");
       setErrorMsg(err instanceof Error ? err.message : "Terjadi kesalahan saat memproses gambar.");
