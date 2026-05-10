@@ -9,19 +9,27 @@ export interface UserPreferences {
 }
 
 export interface User {
-  id: string;
+  id: number | string;
   name: string;
   email: string;
-  location: string;
+  city?: string;
+  district?: string;
+  avatar_url?: string;
+  level: number;
+  current_xp: number;
+  total_xp: number;
+  streak_days?: number;
+  role?: string;
+  government_unit?: string;
+  // Computed/frontend-only fields
+  avatarInitials?: string;
+  xp?: number;
+  totalXP?: number;
+  rank?: number;
+  location?: string;
   kecamatan?: string;
   bio?: string;
-  avatarUrl?: string;
-  avatarInitials: string;
   avatarColor?: string;
-  level: number;
-  xp: number;
-  totalXP: number;
-  rank: number;
   isVerified?: boolean;
   joinedAt?: string;
   preferences?: UserPreferences;
@@ -43,6 +51,12 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   badgeNotifications: true,
 };
 
+function makeInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
@@ -55,7 +69,15 @@ export const useAuthStore = create<AuthStore>()(
 
       setUser: (user) =>
         set({
-          user: { preferences: DEFAULT_PREFERENCES, ...user },
+          user: {
+            ...user,
+            avatarInitials: user.avatarInitials || makeInitials(user.name),
+            xp: user.xp ?? user.current_xp ?? 0,
+            totalXP: user.totalXP ?? user.total_xp ?? 0,
+            location: user.location ?? user.city ?? "",
+            kecamatan: user.kecamatan ?? user.district ?? "",
+            preferences: user.preferences ?? DEFAULT_PREFERENCES,
+          },
           isAuthenticated: true,
         }),
 

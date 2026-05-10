@@ -23,6 +23,13 @@ export default class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, message: error.message };
   }
 
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Log to error reporting service in production
+    if (process.env.NODE_ENV === "production") {
+      console.error("[ErrorBoundary]", error, errorInfo);
+    }
+  }
+
   handleReset = () => {
     this.setState({ hasError: false, message: "" });
   };
@@ -32,9 +39,13 @@ export default class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) return this.props.fallback;
 
       return (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-[12px] border border-red-100 bg-red-50 p-8 text-center">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="flex flex-col items-center justify-center gap-3 rounded-[12px] border border-red-100 bg-red-50 p-8 text-center"
+        >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-            <AlertTriangle size={22} className="text-red-500" />
+            <AlertTriangle size={22} className="text-red-500" aria-hidden="true" />
           </div>
           <div>
             <p className="text-sm font-semibold text-red-700">Terjadi Kesalahan</p>
@@ -44,7 +55,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           </div>
           <button
             onClick={this.handleReset}
-            className="rounded-md bg-red-500 px-4 py-1.5 text-xs font-medium text-white hover:bg-red-600"
+            className="rounded-md bg-red-500 px-4 py-1.5 text-xs font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Coba Lagi
           </button>

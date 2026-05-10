@@ -32,3 +32,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+
+# Laravel backend
+pacul-backend/vendor/
+pacul-backend/.env
+pacul-backend/storage/framework/cache/data/*
+pacul-backend/storage/framework/sessions/*
+pacul-backend/storage/framework/views/*
+pacul-backend/storage/logs/*
+pacul-backend/database/database.sqlite
+pacul-backend/bootstrap/cache/*.php

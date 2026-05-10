@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
 
+        // Global middleware
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
@@ -30,5 +33,19 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->renderable(function (\Illuminate\Auth\AuthenticationException $e) {
             return response()->json(['message' => 'Tidak terautentikasi. Silakan login.'], 401);
+        });
+
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException $e) {
+            return response()->json([
+                'message' => 'Terlalu banyak permintaan. Coba lagi nanti.',
+            ], 429);
+        });
+
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+            return response()->json(['message' => 'Endpoint tidak ditemukan.'], 404);
+        });
+
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $e) {
+            return response()->json(['message' => 'Method tidak diizinkan.'], 405);
         });
     })->create();

@@ -1,30 +1,48 @@
-import axios, { type AxiosRequestConfig } from "axios";
+import axios, { type AxiosRequestConfig, type AxiosError } from "axios";
 
 const _axios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api",
-  timeout: 10_000,
-  headers: { "Content-Type": "application/json" },
+  timeout: 15_000,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 /* ── Request: attach auth token ── */
 _axios.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("pacul_token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token && token !== "guest_token_demo") {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
 
-/* ── Response: unwrap data, handle 401 ── */
+/* ── Response: unwrap data, handle errors ── */
 _axios.interceptors.response.use(
   (response) => response.data,
-  (error) => {
-    if (error.response?.status === 401 && typeof window !== "undefined") {
+  (error: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) => {
+    const status = error.response?.status;
+
+    if (status === 401 && typeof window !== "undefined") {
       localStorage.removeItem("pacul_token");
       localStorage.removeItem("pacul-auth");
-      window.location.href = "/login";
+      // Only redirect if not already on login page
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
+      }
     }
-    return Promise.reject(error.response?.data ?? error);
+
+    // Construct a meaningful error object
+    const apiError = {
+      status,
+      message: error.response?.data?.message || error.message || "Terjadi kesalahan",
+      errors: error.response?.data?.errors || {},
+    };
+
+    return Promise.reject(apiError);
   }
 );
 
@@ -41,3 +59,10 @@ export const api = {
   delete: <T = void>(url: string, config?: AxiosRequestConfig): Promise<T> =>
     _axios.delete(url, config) as unknown as Promise<T>,
 };
+
+/* ── Error type for consumers ── */
+export interface ApiError {
+  status?: number;
+  message: string;
+  errors: Record<string, string[]>;
+}

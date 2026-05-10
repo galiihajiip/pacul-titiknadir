@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\{User, XpLog};
+use Illuminate\Support\Facades\Cache;
 
 class XPService
 {
@@ -19,12 +20,30 @@ class XPService
         'daily_login'              => 5,
         'post_collaboration'       => 10,
         'first_scan'               => 30,
+        'claim_challenge'          => 0, // Dynamic amount
+    ];
+
+    // Actions that can only be awarded once per day per user
+    private const DAILY_LIMIT_ACTIONS = [
+        'daily_login',
+        'step_milestone_1000',
+        'step_milestone_5000',
+        'step_milestone_10000',
     ];
 
     public function award(User $user, string $action, int $amount = 0, array $meta = []): int
     {
         $xp = $amount > 0 ? $amount : (self::XP_RULES[$action] ?? 0);
         if ($xp <= 0) return 0;
+
+        // Prevent duplicate daily awards
+        if (in_array($action, self::DAILY_LIMIT_ACTIONS)) {
+            $cacheKey = "xp_daily_{$user->id}_{$action}_" . now()->toDateString();
+            if (Cache::has($cacheKey)) {
+                return 0;
+            }
+            Cache::put($cacheKey, true, now()->endOfDay());
+        }
 
         $user->increment('current_xp', $xp);
         $user->increment('total_xp', $xp);
@@ -40,6 +59,9 @@ class XPService
         ]);
 
         $this->checkLevelUp($fresh);
+
+        // Invalidate leaderboard cache when XP changes
+        Cache::forget('leaderboard_top20');
 
         return $xp;
     }

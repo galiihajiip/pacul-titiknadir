@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { api } from "@/services/api";
+import Cookies from "js-cookie";
 
 export interface GovUser {
   id: string;
   name: string;
   email: string;
   role: "admin" | "government";
-  governmentUnit: string;
-  avatarInitials: string;
+  government_unit: string;
+  avatar_url?: string;
 }
 
 interface GovAuthStore {
@@ -15,13 +17,8 @@ interface GovAuthStore {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
+  setUser: (user: GovUser) => void;
 }
-
-const MOCK_GOV_USERS: GovUser[] = [
-  { id: "gov1", name: "Budi Santoso", email: "budi@surabaya.go.id", role: "government", governmentUnit: "Dinas Kebersihan Kota Surabaya", avatarInitials: "BS" },
-  { id: "gov2", name: "Siti Rahma", email: "siti@surabaya.go.id", role: "government", governmentUnit: "BPLHD Surabaya", avatarInitials: "SR" },
-  { id: "adm1", name: "Admin PACUL", email: "admin@pacul.gov.id", role: "admin", governmentUnit: "PACUL Platform", avatarInitials: "AP" },
-];
 
 export const useGovAuthStore = create<GovAuthStore>()(
   persist(
@@ -30,24 +27,46 @@ export const useGovAuthStore = create<GovAuthStore>()(
       isAuthenticated: false,
 
       login: async (email, password) => {
-        await new Promise((r) => setTimeout(r, 900));
-        const isGovEmail = email.endsWith("@surabaya.go.id") || email.endsWith("@pacul.gov.id");
-        if (!isGovEmail) return { success: false, error: "Gunakan email akun pemerintah (@surabaya.go.id atau @pacul.gov.id)" };
-        if (password.length < 6) return { success: false, error: "Password salah." };
-        const found = MOCK_GOV_USERS.find((u) => u.email === email) ?? {
-          id: `gov-${Date.now()}`,
-          name: email.split("@")[0],
-          email,
-          role: "government" as const,
-          governmentUnit: "Dinas Kebersihan Kota Surabaya",
-          avatarInitials: email.substring(0, 2).toUpperCase(),
-        };
-        set({ user: found, isAuthenticated: true });
-        return { success: true };
+        try {
+          const response = await api.post<{ user: GovUser; token: string }>("/auth/gov/login", {
+            email,
+            password,
+          });
+
+          Cookies.set("pacul_token", response.token, {
+            expires: 7,
+            sameSite: "lax",
+            secure: window.location.protocol === "https:",
+          });
+          localStorage.setItem("pacul_token", response.token);
+
+          set({ user: response.user, isAuthenticated: true });
+          return { success: true };
+        } catch (err: unknown) {
+          const error = err as { message?: string };
+          return {
+            success: false,
+            error: error.message || "Login gagal. Periksa email dan password.",
+          };
+        }
       },
 
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => {
+        api.post("/auth/logout").catch(() => {});
+        Cookies.remove("pacul_token");
+        localStorage.removeItem("pacul_token");
+        localStorage.removeItem("pacul-gov-auth");
+        set({ user: null, isAuthenticated: false });
+      },
+
+      setUser: (user) => set({ user, isAuthenticated: true }),
     }),
-    { name: "pacul-gov-auth" }
+    {
+      name: "pacul-gov-auth",
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    }
   )
 );

@@ -6,6 +6,7 @@ use App\Models\{Challenge, UserChallenge, User};
 use App\Services\XPService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class EcoActionController extends Controller
 {
@@ -113,11 +114,14 @@ class EcoActionController extends Controller
 
     public function leaderboard(Request $request): JsonResponse
     {
-        $leaders = User::select('id', 'name', 'avatar_url', 'level', 'total_xp', 'city')
-            ->orderByDesc('total_xp')
-            ->limit(20)
-            ->get()
-            ->map(fn($u, $i) => array_merge($u->toArray(), ['rank' => $i + 1]));
+        $leaders = Cache::remember('leaderboard_top20', 300, function () {
+            return User::select('id', 'name', 'avatar_url', 'level', 'total_xp', 'city')
+                ->where('role', 'user')
+                ->orderByDesc('total_xp')
+                ->limit(20)
+                ->get()
+                ->map(fn($u, $i) => array_merge($u->toArray(), ['rank' => $i + 1]));
+        });
 
         return response()->json($leaders);
     }

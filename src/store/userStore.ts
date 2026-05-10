@@ -19,39 +19,49 @@ interface UserStore {
   rank: number;
   xpHistory: XPEvent[];
 
-  awardXP: (amount: number, source: string, label: string) => void;
-  deductXP: (amount: number) => void;
+  syncFromServer: (data: { current_xp: number; total_xp: number; level: number }) => void;
+  addXPEvent: (amount: number, source: string, label: string) => void;
   addCarbonSaved: (kg: number) => void;
   incrementChallengesCompleted: () => void;
-  resetToDemo: () => void;
+  reset: () => void;
 }
 
-function calcLevel(totalXp: number): { level: number; xpToNext: number } {
-  const level = Math.floor(totalXp / 500) + 1;
-  const xpToNext = level * 500 - totalXp;
-  return { level, xpToNext };
+function calcXpToNext(level: number, totalXp: number): number {
+  // Match backend formula: level = floor(sqrt(totalXp / 100)) + 1
+  // Next level threshold: ((level)^2) * 100
+  const nextLevelXp = Math.pow(level, 2) * 100;
+  return Math.max(0, nextLevelXp - totalXp);
 }
 
-const DEMO: Pick<UserStore, "xp" | "totalXpEarned" | "level" | "xpToNextLevel" | "carbonSaved" | "challengesCompleted" | "rank" | "xpHistory"> = {
-  xp: 1250,
-  totalXpEarned: 4200,
-  level: 9,
-  xpToNextLevel: 300,
-  carbonSaved: 124,
-  challengesCompleted: 15,
-  rank: 12,
-  xpHistory: [],
+const INITIAL_STATE = {
+  xp: 0,
+  totalXpEarned: 0,
+  level: 1,
+  xpToNextLevel: 100,
+  carbonSaved: 0,
+  challengesCompleted: 0,
+  rank: 0,
+  xpHistory: [] as XPEvent[],
 };
 
 export const useUserStore = create<UserStore>()(
   persist(
     (set, get) => ({
-      ...DEMO,
+      ...INITIAL_STATE,
 
-      awardXP: (amount, source, label) => {
+      syncFromServer: (data) => {
+        set({
+          xp: data.current_xp,
+          totalXpEarned: data.total_xp,
+          level: data.level,
+          xpToNextLevel: calcXpToNext(data.level, data.total_xp),
+        });
+      },
+
+      addXPEvent: (amount, source, label) => {
         const s = get();
         const newTotal = s.totalXpEarned + amount;
-        const { level, xpToNext } = calcLevel(newTotal);
+        const newLevel = Math.max(1, Math.floor(Math.sqrt(newTotal / 100)) + 1);
         const event: XPEvent = {
           id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           source,
@@ -62,34 +72,24 @@ export const useUserStore = create<UserStore>()(
         set({
           xp: s.xp + amount,
           totalXpEarned: newTotal,
-          level,
-          xpToNextLevel: xpToNext,
+          level: newLevel,
+          xpToNextLevel: calcXpToNext(newLevel, newTotal),
           xpHistory: [event, ...s.xpHistory].slice(0, 50),
         });
       },
 
-      deductXP: (amount) =>
-        set((s) => ({ xp: Math.max(0, s.xp - amount) })),
-
       addCarbonSaved: (kg) =>
-        set((s) => ({ carbonSaved: s.carbonSaved + kg })),
+        set((s) => ({ carbonSaved: +(s.carbonSaved + kg).toFixed(3) })),
 
       incrementChallengesCompleted: () =>
         set((s) => ({ challengesCompleted: s.challengesCompleted + 1 })),
 
-      resetToDemo: () => set(DEMO),
+      reset: () => set(INITIAL_STATE),
     }),
     {
       name: "pacul-user-store",
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
-      migrate: (persisted: unknown, fromVersion: number) => {
-        const p = persisted as Partial<typeof DEMO>;
-        if (fromVersion < 2 && (!p.xp || p.xp === 0)) {
-          return { ...DEMO };
-        }
-        return p;
-      },
       partialize: (s) => ({
         xp: s.xp,
         totalXpEarned: s.totalXpEarned,

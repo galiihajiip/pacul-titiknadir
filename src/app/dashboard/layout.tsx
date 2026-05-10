@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
+import { useSSE } from "@/hooks/useSSE";
 import { AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 import Sidebar from "@/components/layout/Sidebar";
-import { useUserStore } from "@/store/userStore";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 
 export default function DashboardLayout({
   children,
@@ -14,35 +15,42 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   useOfflineDetection();
+  useSSE();
 
+  // Close sidebar on route change (mobile)
   useEffect(() => {
-    const today = new Date().toDateString();
-    const lastLogin = localStorage.getItem("pacul_last_login");
-    if (lastLogin !== today) {
-      localStorage.setItem("pacul_last_login", today);
-      useUserStore.getState().awardXP(5, "daily_login", "Login harian 🌱");
-    }
-  }, []);
+    setSidebarOpen(false);
+  }, [children]);
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-[#2D5F3F] focus:shadow-lg"
+      >
+        Langsung ke konten utama
+      </a>
+
       <Sidebar mobileOpen={sidebarOpen} onMobileClose={() => setSidebarOpen(false)} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar — hamburger only, hidden on lg */}
-        <div className="flex h-14 items-center border-b border-[#E5E7EB] bg-white px-4 lg:hidden">
+        <header className="flex h-14 items-center border-b border-[#E5E7EB] bg-white px-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            aria-label="Buka sidebar"
-            className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-[#2D5F3F]"
+            aria-label="Buka menu navigasi"
+            className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-[#2D5F3F] focus:outline-none focus:ring-2 focus:ring-[#2D5F3F] focus:ring-offset-2"
           >
-            <Menu size={22} />
+            <Menu size={22} aria-hidden="true" />
           </button>
           <span className="ml-3 text-sm font-semibold text-[#2D5F3F]">PACUL Dashboard</span>
-        </div>
+        </header>
 
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <AnimatePresence mode="wait">{children}</AnimatePresence>
+        <main id="main-content" className="flex-1 overflow-y-auto p-4 lg:p-6" role="main">
+          <ErrorBoundary>
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
+          </ErrorBoundary>
         </main>
       </div>
     </div>

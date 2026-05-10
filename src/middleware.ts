@@ -6,18 +6,31 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isDashboard = pathname.startsWith("/dashboard");
+  const isGov = pathname.startsWith("/gov");
   const isLogin = pathname === "/login";
   const isRegister = pathname === "/register";
+  const isGovLogin = pathname === "/gov/login";
 
-  if (isDashboard && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Protected routes require token
+  if ((isDashboard || (isGov && !isGovLogin)) && !token) {
+    const loginUrl = isGov ? "/gov/login" : "/login";
+    return NextResponse.redirect(new URL(loginUrl, request.url));
   }
+
+  // Redirect authenticated users away from login/register
   if ((isLogin || isRegister) && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
-  return NextResponse.next();
+
+  // Add security headers
+  const response = NextResponse.next();
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  return response;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/gov/:path*", "/login", "/register"],
 };
